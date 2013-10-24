@@ -1,4 +1,4 @@
-assetsjsloader
+AssetsJSLoader (AJL)
 ==============
 
-JS loader for assets which loading CSS and JS files Async
+JS-loader for assets which loads CSS and JS files asynchronously.
