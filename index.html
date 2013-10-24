@@ -5,15 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
+    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/highlight.css"/>
+    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/print.css" media="print"/>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>AssetsJSLoader by ghaiklor</title>
+    <title>AssetsJSLoader</title>
 </head>
 
 <body>
@@ -24,7 +25,8 @@
         <h2>JS-loader for assets which loads CSS and JS files asynchronously</h2>
         <a href="https://github.com/ghaiklor/assetsjsloader" class="button">
             <small>View project on</small>
-            GitHub</a>
+            GitHub
+        </a>
     </div>
 </header>
 
@@ -44,15 +46,38 @@
                 Just call AJL constructor with provided parameters:
             </p>
 
-            <pre>
-                <code>
-                    AJL([
-                    'module1.js',
-                    'css1.css',
-                    'module2.js'
-                    ]);
-                </code>
-            </pre>
+<pre>
+    <code>
+        (function() {
+            AJL.Environment('debug', ['foo.js', 'bar.js', 'style.css']);
+        })();
+    </code>
+</pre>
+            <h3>
+                <a name="demos" class="anchor" href="#demos">
+                    <span class="octicon octicon-link"></span>
+                </a>Demo
+            </h3>
+
+            <p>Here you can see AssetsJSLoader in action</p>
+
+            <p>
+                <a href="demos/test_with_ajl.html">Testing Page with AJL working</a>
+            </p>
+
+            <p>
+                <a href="demos/test_without_ajl.html">Testing Page without AJL</a>
+            </p>
+
+            <h3>
+                <a name="documentation" class="anchor" href="#documentation">
+                    <span class="oction oction-link"></span>
+                </a>Documentation
+            </h3>
+
+            <p>
+                Here you can find documentation
+            </p>
         </section>
 
         <aside id="sidebar">
@@ -71,6 +96,10 @@
     </div>
 </div>
 
-
+<script src="vendor/javascripts/highlight.min.js"></script>
+<script>
+    hljs.tabReplace = '    ';
+    hljs.initHighlightingOnLoad();
+</script>
 </body>
 </html>
