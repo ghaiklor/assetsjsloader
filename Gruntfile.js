@@ -19,7 +19,7 @@ module.exports = function (grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['src/Environment.js', 'src/Loader.js'],
+                src: ['src/Config.js', 'src/Helper.js', 'src/Loader.js', 'src/Package.js'],
                 dest: 'dist/AJL.concat.js'
             }
         },
@@ -32,39 +32,18 @@ module.exports = function (grunt) {
                 dest: 'dist/AJL.min.js'
             }
         },
-        jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                unused: true,
-                boss: true,
-                eqnull: true,
-                globals: {
-                    jQuery: true
-                }
-            }
-        },
         watch: {
-            gruntfile: {
-                files: '<%= concat.dist.src %>',
-                tasks: ['default']
-            }
+            files: '<%= concat.dist.src %>',
+            tasks: ['default']
         }
     });
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'uglify']);
 
 };
