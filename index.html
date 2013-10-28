@@ -5,10 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/stylesheet.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/pygment_trac.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/highlight.css"/>
-    <link rel="stylesheet" type="text/css" href="vendor/stylesheets/print.css" media="print"/>
+    <link rel="stylesheet" href="vendor/css/normalize.css"/>
+    <link rel="stylesheet" href="vendor/css/foundation.min.css"/>
+    <link rel="stylesheet" href="vendor/css/style.css"/>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -16,90 +15,160 @@
 
     <title>AssetsJSLoader</title>
 </head>
-
 <body>
-<header>
-    <div class="inner">
-        <h1>AssetsJSLoader</h1>
-
-        <h2>JS-loader for assets which loads CSS and JS files asynchronously</h2>
-        <a href="https://github.com/ghaiklor/assetsjsloader" class="button">
-            <small>View project on</small>
-            GitHub
-        </a>
-    </div>
-</header>
-
-<div id="content-wrapper">
-    <div class="inner clearfix">
-        <section id="main-content">
-            <h3>
-                <a name="welcome-to-ajl" class="anchor" href="#welcome-to-ajl">
-                    <span class="octicon octicon-link"></span>
-                </a>Welcome to AssetsJSLoader
-            </h3>
-
-            <p>AssetsJSLoader help you don't worry about loading CSS and JS files with non-blocking and lazy
-                loading...</p>
-
-            <p>
-                Just call AJL constructor with provided parameters:
-            </p>
-
-<pre>
-    <code>
-        (function() {
-            AJL.Environment('debug', ['foo.js', 'bar.js', 'style.css']);
-        })();
-    </code>
-</pre>
-            <h3>
-                <a name="demos" class="anchor" href="#demos">
-                    <span class="octicon octicon-link"></span>
-                </a>Demo
-            </h3>
-
-            <p>Here you can see AssetsJSLoader in action</p>
-
-            <p>
-                <a href="demos/test_with_ajl.html">Testing Page with AJL working</a>
-            </p>
-
-            <p>
-                <a href="demos/test_without_ajl.html">Testing Page without AJL</a>
-            </p>
-
-            <h3>
-                <a name="documentation" class="anchor" href="#documentation">
-                    <span class="oction oction-link"></span>
-                </a>Documentation
-            </h3>
-
-            <p>
-                Here you can find documentation
-            </p>
+<!------------------------------------------------------------------------------->
+<!--------------------------NAVIGATION TOP BAR----------------------------------->
+<!------------------------------------------------------------------------------->
+<div class="sticky">
+    <nav class="top-bar">
+        <ul class="title-area">
+            <li class="name">
+                <h1>
+                    <a href="#">AssetsJSLoader</a>
+                </h1>
+            </li>
+            <li class="toggle-topbar menu-icon">
+                <a href="#">
+                    <span>Menu</span>
+                </a>
+            </li>
+        </ul>
+        <section class="top-bar-section">
+            <ul class="right smint-menu">
+                <li>
+                    <a href="#welcome">Welcome</a>
+                </li>
+                <li>
+                    <a href="#getting-started">Getting Started</a>
+                </li>
+                <li>
+                    <a href="#documentation">Documentation</a>
+                </li>
+                <li>
+                    <a href="#demos">Demos</a>
+                </li>
+            </ul>
         </section>
+    </nav>
+</div>
+<!-------------------------------------------------------------------------------->
+<!-----------------------------------END NAVIGATION BAR--------------------------->
+<!-------------------------------------START HEADER------------------------------->
+<!-------------------------------------------------------------------------------->
+<header>
+    <div class="row hide-for-small show-for-large">
+        <div class="large-12 text-center large-centered">
+            <h1>AssetsJSLoader</h1>
 
-        <aside id="sidebar">
-            <a href="https://github.com/ghaiklor/assetsjsloader/zipball/master" class="button">
+            <h2>JS-loader for assets which loads CSS and JS files asynchronously</h2>
+        </div>
+    </div>
+    <div class="row hide-for-small show-for-large">
+        <!--TODO: make right buttons-->
+        <div class="large-12 text-center large-centered">
+            <a href="https://github.com/ghaiklor/assetsjsloader" target="_blank" class="github-button-with-image">
+                <small>View project on</small>
+                GitHub
+            </a>
+
+            <a href="https://github.com/ghaiklor/assetsjsloader/zipball/master" class="download-button-with-image">
                 <small>Download</small>
                 .zip file
             </a>
-            <a href="https://github.com/ghaiklor/assetsjsloader/tarball/master" class="button">
+
+            <a href="https://github.com/ghaiklor/assetsjsloader/tarball/master" class="download-button-with-image">
                 <small>Download</small>
                 .tar.gz file
             </a>
-
-            <p class="repo-owner"><a href="https://github.com/ghaiklor/assetsjsloader"></a> is maintained by <a
-                    href="https://github.com/ghaiklor">ghaiklor</a>.</p>
-        </aside>
+        </div>
     </div>
-</div>
+    <div class="row show-for-small hide-for-large">
+        <div class="small-12 column">
+            <ul class="button-group">
+                <li><a href="https://github.com/ghaiklor/assetsjsloader" target="_blank"
+                       class="button secondary">
+                    View project on GitHub
+                </a></li>
+                <li><a href="https://github.com/ghaiklor/assetsjsloader/zipball/master"
+                       class="button">
+                    Download .zip file
+                </a></li>
+                <li><a href="https://github.com/ghaiklor/assetsjsloader/tarball/master"
+                       class="button">
+                    Download .tar.gz file
+                </a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<!-------------------------------------------------------------------------------->
+<!------------------------------------END HEADER---------------------------------->
+<!------------------------------START CONTENT WRAPPER----------------------------->
+<!-------------------------------------------------------------------------------->
+<section id="start-content">
+    <div class="row columns">
+        <div class="small-11 large-11">
+            <section id="welcome">
+                <h3>
+                    <a href="#welcome">
+                    </a>Welcome to AssetsJSLoader
+                </h3>
 
-<script src="vendor/javascripts/highlight.min.js"></script>
+                <p>AssetsJSLoader help you don't worry about loading CSS and JS files with non-blocking and lazy
+                    loading...</p>
+            </section>
+
+            <section id="getting-started">
+                <h3>
+                    <a href="#getting-started">
+                    </a>Getting Started
+                </h3>
+            </section>
+
+            <section id="documentation">
+                <h3>
+                    <a href="#documentation">
+                    </a>Documentation
+                </h3>
+
+                <p>
+                    <a href="doc/index.html">Here you can find documentation</a>
+                </p>
+            </section>
+
+            <section id="demos">
+                <h3>
+                    <a href="#demos">
+                    </a>Demo
+                </h3>
+
+                <p>Here you can see AssetsJSLoader in action</p>
+
+                <p>
+                    <a href="demos/test_with_ajl.html">Testing Page with AJL working</a>
+                </p>
+
+                <p>
+                    <a href="demos/test_without_ajl.html">Testing Page without AJL</a>
+                </p>
+            </section>
+        </div>
+    </div>
+</section>
+<!-------------------------------------------------------------->
+<!----------------END CONTENT WRAPPER--------------------------->
+<!----------------------SCRIPTS--------------------------------->
+<!-------------------------------------------------------------->
+<script src="vendor/js/jquery.js"></script>
+<script src="vendor/js/custom.modernizr.js"></script>
+<script src="vendor/js/foundation.min.js"></script>
+<script src="vendor/js/jquery.smint.js"></script>
 <script>
-    hljs.tabReplace = '    ';
-    hljs.initHighlightingOnLoad();
+    $(document).foundation();
+    $('.smint-menu').smint();
 </script>
+<!-------------------------------------------------------------->
+<!------------------END SCRIPTS--------------------------------->
+<!-------------------------------------------------------------->
 </body>
 </html>
