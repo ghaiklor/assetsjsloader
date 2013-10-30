@@ -13,10 +13,17 @@ var AJL = (function Helper(window, document, AJL) {
         AJL.Helper.prototype = {
             /**
              * Extend object
-             * @param {object} obj Object which need to extend
+             * @param {object|collection} dest Destination object
+             * @param {object|collection} src Source object
+             * @returns {object|collection} Resulting object
              */
-            extend: function (obj) {
-                //TODO: implement this
+            extend: function (dest, src) {
+                for (var item in src) {
+                    if (src.hasOwnProperty(item)) {
+                        dest[item] = src[item];
+                    }
+                }
+                return dest;
             },
             /**
              * Get extension of filename

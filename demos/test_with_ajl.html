@@ -7,19 +7,15 @@
 <a href="../index.html">Back</a>
 
 <script src="../dist/AJL.min.js"></script>
-
-<!--<script src="../src/Config.js"></script>-->
-<!--<script src="../src/Helper.js"></script>-->
-<!--<script src="../src/Loader.js"></script>-->
-<!--<script src="../src/Package.js"></script>-->
-
 <script>
     new AJL.Package('Test', [
         'vendor/angular.js',
         'vendor/jquery.ui.accordion.css',
         'vendor/jquery-2.0.3.js',
         'vendor/snap.svg.js',
-    ]).load();
+    ], {
+        lazy: true
+    }).load();
 </script>
 </body>
 </html>

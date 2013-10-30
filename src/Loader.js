@@ -39,6 +39,7 @@ var AJL = (function Loader(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
+                //TODO: make loading params from package config
                 var tag = document.createElement('link');
                 tag.rel = 'stylesheet';
                 tag.type = 'text/css';

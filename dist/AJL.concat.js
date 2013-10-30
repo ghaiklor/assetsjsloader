@@ -1,4 +1,4 @@
-/*! AssetsJSLoader - v0.1.0 - 2013-10-25
+/*! AssetsJSLoader - v0.1.0 - 2013-10-30
 * http://ghaiklor.github.io/assetsjsloader/
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
 var AJL = (function Config(window, document, AJL) {
@@ -10,11 +10,31 @@ var AJL = (function Config(window, document, AJL) {
          * @constructor
          */
         AJL.Config = function (params) {
+            /**
+             * Load asynchronous or not
+             * @type {boolean}
+             */
             this.async = true;
+            /**
+             * Lazy loading or not
+             * @type {boolean}
+             */
+            this.lazy = false;
+            /**
+             * Type attribute in script tag
+             * @type {string}
+             */
             this.scriptTypeAttr = 'text/javascript';
+            /**
+             * Type attribute in link tag for css-file
+             * @type {string}
+             */
             this.linkCssTypeAttr = 'text/css';
+            /**
+             * Rel attribute in link tag for css-file
+             * @type {string}
+             */
             this.linkCssRelAttr = 'stylesheet';
-            //TODO: make extending of objects
             AJL.Helper.extend(this, params);
             return this;
         };
@@ -66,10 +86,17 @@ var AJL = (function Helper(window, document, AJL) {
         AJL.Helper.prototype = {
             /**
              * Extend object
-             * @param {object} obj Object which need to extend
+             * @param {object|collection} dest Destination object
+             * @param {object|collection} src Source object
+             * @returns {object|collection} Resulting object
              */
-            extend: function (obj) {
-                //TODO: implement this
+            extend: function (dest, src) {
+                for (var item in src) {
+                    if (src.hasOwnProperty(item)) {
+                        dest[item] = src[item];
+                    }
+                }
+                return dest;
             },
             /**
              * Get extension of filename
@@ -157,6 +184,7 @@ var AJL = (function Loader(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
+                //TODO: make loading params from package config
                 var tag = document.createElement('link');
                 tag.rel = 'stylesheet';
                 tag.type = 'text/css';
@@ -195,18 +223,19 @@ var AJL = (function Package(window, document, AJL) {
                 var self = this,
                     config = self.config,
                     assets = self.assets,
-                    url = '';
+                    currentUrl = '';
                 if (AJL.Helper.isEmpty(assets)) {
                     return false;
                 }
-                for (var item in assets) {
-                    if (assets.hasOwnProperty(item)) {
-                        url = assets[item];
-                        if (AJL.Helper.isScriptFile(url)) {
-                            AJL.Loader.appendScriptTag(url);
+                for (var url in assets) {
+                    if (assets.hasOwnProperty(url)) {
+                        currentUrl = assets[url];
+                        if (AJL.Helper.isScriptFile(currentUrl)) {
+                            AJL.Loader.appendScriptTag(currentUrl);
+                            continue;
                         }
-                        if (AJL.Helper.isCssFile(url)) {
-                            AJL.Loader.appendLinkTag(url);
+                        if (AJL.Helper.isCssFile(currentUrl)) {
+                            AJL.Loader.appendLinkTag(currentUrl);
                         }
                     }
                 }

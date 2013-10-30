@@ -7,11 +7,31 @@ var AJL = (function Config(window, document, AJL) {
          * @constructor
          */
         AJL.Config = function (params) {
+            /**
+             * Load asynchronous or not
+             * @type {boolean}
+             */
             this.async = true;
+            /**
+             * Lazy loading or not
+             * @type {boolean}
+             */
+            this.lazy = false;
+            /**
+             * Type attribute in script tag
+             * @type {string}
+             */
             this.scriptTypeAttr = 'text/javascript';
+            /**
+             * Type attribute in link tag for css-file
+             * @type {string}
+             */
             this.linkCssTypeAttr = 'text/css';
+            /**
+             * Rel attribute in link tag for css-file
+             * @type {string}
+             */
             this.linkCssRelAttr = 'stylesheet';
-            //TODO: make extending of objects
             AJL.Helper.extend(this, params);
             return this;
         };

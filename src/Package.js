@@ -24,18 +24,19 @@ var AJL = (function Package(window, document, AJL) {
                 var self = this,
                     config = self.config,
                     assets = self.assets,
-                    url = '';
+                    currentUrl = '';
                 if (AJL.Helper.isEmpty(assets)) {
                     return false;
                 }
-                for (var item in assets) {
-                    if (assets.hasOwnProperty(item)) {
-                        url = assets[item];
-                        if (AJL.Helper.isScriptFile(url)) {
-                            AJL.Loader.appendScriptTag(url);
+                for (var url in assets) {
+                    if (assets.hasOwnProperty(url)) {
+                        currentUrl = assets[url];
+                        if (AJL.Helper.isScriptFile(currentUrl)) {
+                            AJL.Loader.appendScriptTag(currentUrl);
+                            continue;
                         }
-                        if (AJL.Helper.isCssFile(url)) {
-                            AJL.Loader.appendLinkTag(url);
+                        if (AJL.Helper.isCssFile(currentUrl)) {
+                            AJL.Loader.appendLinkTag(currentUrl);
                         }
                     }
                 }
