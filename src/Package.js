@@ -22,7 +22,6 @@ var AJL = (function Package(window, document, AJL) {
             load: function () {
                 //TODO: think how refactor this
                 var self = this,
-                    config = self.config,
                     assets = self.assets,
                     currentUrl = '';
                 if (AJL.Helper.isEmpty(assets)) {
@@ -32,11 +31,13 @@ var AJL = (function Package(window, document, AJL) {
                     if (assets.hasOwnProperty(url)) {
                         currentUrl = assets[url];
                         if (AJL.Helper.isScriptFile(currentUrl)) {
-                            AJL.Loader.appendScriptTag(currentUrl);
+                            //We need use call 'cause Loader must execute in context of current package's config
+                            AJL.Loader.appendScriptTag.call(self.config, currentUrl);
                             continue;
                         }
                         if (AJL.Helper.isCssFile(currentUrl)) {
-                            AJL.Loader.appendLinkTag(currentUrl);
+                            //We need use call 'cause Loader must execute in context of current package's config
+                            AJL.Loader.appendLinkTag.call(self.config, currentUrl);
                         }
                     }
                 }

@@ -25,12 +25,13 @@ var AJL = (function Loader(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             appendScriptTag: function (src) {
-                //TODO: make loading params from package config
+                //IMPORTANT:
+                //In this function this-context is {AJL.Package.Config}
                 var tag = document.createElement('script');
-                tag.type = 'text/javascript';
-                tag.async = true;
+                tag.type = this.getItem('scriptTypeAttr');
+                tag.async = this.getItem('async');
                 tag.src = src;
-                this.appendToHead(tag);
+                AJL.Loader.appendToHead(tag);
                 return true;
             },
             /**
@@ -39,12 +40,13 @@ var AJL = (function Loader(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
-                //TODO: make loading params from package config
+                //IMPORTANT:
+                //In this function this-context is {AJL.Package.Config}
                 var tag = document.createElement('link');
-                tag.rel = 'stylesheet';
-                tag.type = 'text/css';
+                tag.rel = this.getItem('linkCssRelAttr');
+                tag.type = this.getItem('linkCssTypeAttr');
                 tag.href = src;
-                this.appendToHead(tag);
+                AJL.Loader.appendToHead(tag);
                 return true;
             }
         };

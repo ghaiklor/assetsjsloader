@@ -170,12 +170,13 @@ var AJL = (function Loader(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             appendScriptTag: function (src) {
-                //TODO: make loading params from package config
+                //IMPORTANT:
+                //In this function this-context is {AJL.Package.Config}
                 var tag = document.createElement('script');
-                tag.type = 'text/javascript';
-                tag.async = true;
+                tag.type = this.getItem('scriptTypeAttr');
+                tag.async = this.getItem('async');
                 tag.src = src;
-                this.appendToHead(tag);
+                AJL.Loader.appendToHead(tag);
                 return true;
             },
             /**
@@ -184,12 +185,13 @@ var AJL = (function Loader(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
-                //TODO: make loading params from package config
+                //IMPORTANT:
+                //In this function this-context is {AJL.Package.Config}
                 var tag = document.createElement('link');
-                tag.rel = 'stylesheet';
-                tag.type = 'text/css';
+                tag.rel = this.getItem('linkCssRelAttr');
+                tag.type = this.getItem('linkCssTypeAttr');
                 tag.href = src;
-                this.appendToHead(tag);
+                AJL.Loader.appendToHead(tag);
                 return true;
             }
         };
@@ -221,7 +223,6 @@ var AJL = (function Package(window, document, AJL) {
             load: function () {
                 //TODO: think how refactor this
                 var self = this,
-                    config = self.config,
                     assets = self.assets,
                     currentUrl = '';
                 if (AJL.Helper.isEmpty(assets)) {
@@ -231,11 +232,13 @@ var AJL = (function Package(window, document, AJL) {
                     if (assets.hasOwnProperty(url)) {
                         currentUrl = assets[url];
                         if (AJL.Helper.isScriptFile(currentUrl)) {
-                            AJL.Loader.appendScriptTag(currentUrl);
+                            //We need use call 'cause Loader must execute in context of current package's config
+                            AJL.Loader.appendScriptTag.call(self.config, currentUrl);
                             continue;
                         }
                         if (AJL.Helper.isCssFile(currentUrl)) {
-                            AJL.Loader.appendLinkTag(currentUrl);
+                            //We need use call 'cause Loader must execute in context of current package's config
+                            AJL.Loader.appendLinkTag.call(self.config, currentUrl);
                         }
                     }
                 }
