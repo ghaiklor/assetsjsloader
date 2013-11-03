@@ -2,6 +2,8 @@ var AJL = (function Loader(window, document, AJL) {
     if (!AJL.Loader) {
         /**
          * Creating Loader object
+         * @author Eugene Obrezkov
+         * @copyright 2013 MIT License
          * @returns {AJL.Loader}
          * @constructor
          */
@@ -12,24 +14,24 @@ var AJL = (function Loader(window, document, AJL) {
             /**
              * Append Element to head
              * @param {Element} element Element which need to append
-             * @returns {boolean} True if successful
+             * @returns {AJL.Loader}
              */
             appendToHead: function (element) {
                 var head = document.getElementsByTagName('head')[0];
                 head.appendChild(element);
-                return true;
+                return this;
             },
             /**
              * Generate script tag and insert into head
              * @param {string} src URL to script file
+             * @this {AJL.Config}
              * @returns {boolean} True if successful
              */
             appendScriptTag: function (src) {
-                //IMPORTANT:
-                //In this function this-context is {AJL.Package.Config}
                 var tag = document.createElement('script');
-                tag.type = this.getItem('scriptTypeAttr');
-                tag.async = this.getItem('async');
+                var config = this;
+                tag.type = config.getItem('scriptTypeAttr');
+                tag.async = config.getItem('async');
                 tag.src = src;
                 AJL.Loader.appendToHead(tag);
                 return true;
@@ -37,14 +39,14 @@ var AJL = (function Loader(window, document, AJL) {
             /**
              * Generate link tag and insert into head
              * @param {string} src URL to link file
+             * @this {AJL.Config}
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
-                //IMPORTANT:
-                //In this function this-context is {AJL.Package.Config}
                 var tag = document.createElement('link');
-                tag.rel = this.getItem('linkCssRelAttr');
-                tag.type = this.getItem('linkCssTypeAttr');
+                var config = this;
+                tag.rel = config.getItem('linkCssRelAttr');
+                tag.type = config.getItem('linkCssTypeAttr');
                 tag.href = src;
                 AJL.Loader.appendToHead(tag);
                 return true;

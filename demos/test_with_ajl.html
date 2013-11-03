@@ -8,11 +8,7 @@
 
 <script src="../dist/AJL.min.js"></script>
 <script>
-    /**
-     * Create some package with some assets and lazy loading
-     * @type {AJL.Package}
-     */
-    var packageOne = new AJL.Package('Test One', [
+    new AJL.Package('Test One', [
         'vendor/angular.js',
         'vendor/jquery.ui.accordion.css',
         'vendor/jquery-2.0.3.js',
@@ -20,34 +16,24 @@
     ], {
         lazy: true
     });
-    /**
-     * Create one more package with non asynchronous loading and change HTML-attribute for link
-     * @type {AJL.Package}
-     */
-    var packageTwo = new AJL.Package('Test Two', [
+
+    new AJL.Package('Test Two', [
         'vendor/underscore.js',
         'vendor/prism.js'
     ], {
         async: false,
-        linkCssRelAttr: 'some_other_attr_for_link'
+        linkCssRelAttr: 'some_other_attr_for_link',
+        scriptTypeAttr: 'some_other_attr_for_script'
     });
 
-    /**
-     * Create third package with lazy and asynchronous loading
-     * @type {AJL.Package}
-     */
-    var packageThree = new AJL.Package('Test Three', [
+    new AJL.Package('Test Three', [
         'vendor/underscore.js'
     ], {
-        lazy: true,
+        lazy: false,
         async: true
     });
 
-    /**
-     * It will load only packageOne and packageTwo but not packageThree
-     */
-    packageOne.load();
-    packageTwo.load();
+    AJL.PackageManager.loadAll();
 </script>
 </body>
 </html>

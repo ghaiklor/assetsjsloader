@@ -2,11 +2,21 @@ var AJL = (function Helper(window, document, AJL) {
     if (!AJL.Helper) {
         /**
          * Creating Helper object
+         * @author Eugene Obrezkov
+         * @copyright 2013 MIT License
          * @returns {AJL.Helper}
          * @constructor
          */
         AJL.Helper = function () {
+            /**
+             * @property {Array} cssFiles Array of css-extensions
+             * @type {Array}
+             */
             this.cssFiles = ['css'];
+            /**
+             * @property {Array} jsFiles Array of js-extensions
+             * @type {Array}
+             */
             this.jsFiles = ['js'];
             return this;
         };
@@ -64,6 +74,38 @@ var AJL = (function Helper(window, document, AJL) {
              */
             isUndefined: function (param) {
                 return param == undefined || param == null;
+            },
+            /**
+             * Attach event to object
+             * @param {*} obj Object on which need attach event
+             * @param {string} type Type of event
+             * @param {function} fn Function of event
+             */
+            attachEvent: function (obj, type, fn) {
+                if (obj.attachEvent) {
+                    obj['e' + type + fn] = fn;
+                    obj[type + fn] = function () {
+                        obj['e' + type + fn](window.event);
+                    };
+                    obj.attachEvent('on' + type, obj[type + fn]);
+                } else {
+                    obj.addEventListener(type, fn, false);
+                }
+            },
+            /**
+             * Detach event from object
+             * @param {*} obj Object where event assignee
+             * @param {string} type Type of event
+             * @param {function} fn Function of event
+             */
+            detachEvent: function (obj, type, fn) {
+                if (obj.removeEventListener) {
+                    obj.removeEventListener(type, fn, false);
+                } else {
+                    obj.detachEvent('on' + type, obj[type + fn]);
+                    obj[type + fn] = null;
+                    obj['e' + type + fn] = null;
+                }
             }
         };
         AJL.Helper = new AJL.Helper();
