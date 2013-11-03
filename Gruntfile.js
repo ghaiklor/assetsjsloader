@@ -19,7 +19,7 @@ module.exports = function (grunt) {
                 stripBanners: true
             },
             dist: {
-                src: ['src/Config.js', 'src/Helper.js', 'src/Loader.js', 'src/Package.js'],
+                src: ['src/Config.js', 'src/Helper.js', 'src/Loader.js', 'src/Package.js', 'src/PackageManager.js'],
                 dest: 'dist/AJL.concat.js'
             }
         },
