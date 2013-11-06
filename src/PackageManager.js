@@ -1,28 +1,18 @@
 var AJL = (function PackageManager(window, document, AJL) {
     if (!AJL.PackageManager) {
-        /**
-         * Package's Manager of AJL
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.PackageManager}
-         * @constructor
-         */
-        AJL.PackageManager = function () {
+        AJL.PackageManager = {
             /**
              * @property packages Object of packages in AJL
              * @type {object}
              */
-            this.packages = {};
-            return this;
-        };
-        AJL.PackageManager.prototype = {
+            _packages: {},
             /**
              * Get package from AJL
              * @param {string} name Name of package
              * @returns {boolean|AJL.Package} Package if successful and false if not
              */
             getPackage: function (name) {
-                var packages = this.packages;
+                var packages = this._packages;
                 if (packages.hasOwnProperty(name)) {
                     return packages[name];
                 }
@@ -34,7 +24,7 @@ var AJL = (function PackageManager(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             setPackage: function (pack) {
-                var packages = this.packages;
+                var packages = this._packages;
                 if (!AJL.Helper.isEmpty(pack.name)) {
                     packages[pack.name] = pack;
                     return true;
@@ -45,15 +35,33 @@ var AJL = (function PackageManager(window, document, AJL) {
              * Load all packages in AJL
              */
             loadAll: function () {
-                var packages = this.packages;
+                var packages = this._packages;
                 for (var pack in packages) {
                     if (packages.hasOwnProperty(pack)) {
                         packages[pack].load();
                     }
                 }
+            },
+            /**
+             * Load one package by name
+             * @param {string} name Name of package to load
+             * @return {boolean} True if loaded
+             */
+            loadByName: function (name) {
+                var packages = this._packages;
+                if (packages.hasOwnProperty(name)) {
+                    packages[name].load();
+                    return true;
+                }
+                return false;
+            },
+            /**
+             * Delete all packages from PackageManager
+             */
+            deleteAll: function () {
+                this._packages = {};
             }
         };
-        AJL.PackageManager = new AJL.PackageManager();
     }
     return AJL;
 })(window, document, window.AJL || {});

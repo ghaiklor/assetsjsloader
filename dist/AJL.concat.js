@@ -1,101 +1,34 @@
-/*! AssetsJSLoader - v0.1.0 - 2013-11-03
+/*! AssetsJSLoader - v0.1.0 - 2013-11-06
 * http://ghaiklor.github.io/assetsjsloader/
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
-var AJL = (function Config(window, document, AJL) {
-    if (!AJL.Config) {
-        /**
-         * Creating new Configuration object for {AJL.Package}
-         * @param {collection|object} params Parameters for extend default configuration
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.Config}
-         * @constructor
-         */
-        AJL.Config = function (params) {
-            /**
-             * @property {object} options
-             * @property {boolean} options.async Asynchronous loading of package
-             * @property {boolean} options.lazy Lazy loading (load package on window.load)
-             * @property {string} options.scriptTypeAttr type-attr for script-tag
-             * @property {string} options.linkCssTypeAttr type-attr for link-tag of css
-             * @property {string} options.linkCssRelAttr rel-attr for link-tag of css
-             */
-            var options = {
-                async: true,
-                lazy: false,
-                scriptTypeAttr: 'text/javascript',
-                linkCssTypeAttr: 'text/css',
-                linkCssRelAttr: 'stylesheet'
-            };
-            this.options = AJL.Helper.extend(options, params);
-            return this;
-        };
-        AJL.Config.prototype = {
-            /**
-             * Return value from config storage by key
-             * @param {string} key Key in storage
-             * @returns {*|null} Value if success and null if not
-             */
-            getItem: function (key) {
-                var options = this.options;
-                if (options.hasOwnProperty(key)) {
-                    return options[key];
-                } else {
-                    return null;
-                }
-            },
-            /**
-             * Set item in config storage
-             * @param {string} key Key in storage
-             * @param {*} value Value what need to write
-             * @returns {AJL.Config}
-             */
-            setItem: function (key, value) {
-                var options = this.options;
-                options[key] = value;
-                return this;
-            },
-            /**
-             * Set current config variables from object
-             * @param {object} param Object which need set
-             * @returns {AJL.Config}
-             */
-            setConfigFromObject: function (param) {
-                var options = this.options;
-                for (var item in param) {
-                    if (param.hasOwnProperty(item)) {
-                        options[item] = param[item];
-                    }
-                }
-                return this;
+var AJL = (function (window, document, AJL) {
+    AJL.init = function () {
+        var currentPackage = {};
+        var currentArg = {};
+        for (var pack in arguments) {
+            if (arguments.hasOwnProperty(pack)) {
+                currentArg = arguments[pack];
+                currentPackage = new AJL.Package(currentArg.name, currentArg.assets, currentArg.config);
+                AJL.PackageManager.setPackage(currentPackage);
             }
-        };
-    }
+        }
+        return AJL.PackageManager;
+    };
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function Helper(window, document, AJL) {
     if (!AJL.Helper) {
-        /**
-         * Creating Helper object
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.Helper}
-         * @constructor
-         */
-        AJL.Helper = function () {
+        AJL.Helper = {
             /**
-             * @property {Array} cssFiles Array of css-extensions
+             * @property {Array} _linkFiles Array of link-extensions
              * @type {Array}
              */
-            this.cssFiles = ['css'];
+            _linkFiles: ['css'],
             /**
-             * @property {Array} jsFiles Array of js-extensions
+             * @property {Array} _scriptFiles Array of script-extensions
              * @type {Array}
              */
-            this.jsFiles = ['js'];
-            return this;
-        };
-        AJL.Helper.prototype = {
+            _scriptFiles: ['js'],
             /**
              * Extend object
              * @param {object|collection} dest Destination object
@@ -124,7 +57,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is script file
              */
             isScriptFile: function (url) {
-                return this.jsFiles.indexOf(this.getExtension(url)) != -1;
+                return this._scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check if this file have css-extensions
@@ -132,7 +65,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is css file
              */
             isCssFile: function (url) {
-                return this.cssFiles.indexOf(this.getExtension(url)) != -1;
+                return this._linkFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check variable for empty
@@ -183,23 +116,12 @@ var AJL = (function Helper(window, document, AJL) {
                 }
             }
         };
-        AJL.Helper = new AJL.Helper();
     }
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function Loader(window, document, AJL) {
     if (!AJL.Loader) {
-        /**
-         * Creating Loader object
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.Loader}
-         * @constructor
-         */
-        AJL.Loader = function () {
-            return this;
-        };
-        AJL.Loader.prototype = {
+        AJL.Loader = {
             /**
              * Append Element to head
              * @param {Element} element Element which need to append
@@ -213,7 +135,7 @@ var AJL = (function Loader(window, document, AJL) {
             /**
              * Generate script tag and insert into head
              * @param {string} src URL to script file
-             * @this {AJL.Config}
+             * @this {AJL.PackageConfig}
              * @returns {boolean} True if successful
              */
             appendScriptTag: function (src) {
@@ -228,7 +150,7 @@ var AJL = (function Loader(window, document, AJL) {
             /**
              * Generate link tag and insert into head
              * @param {string} src URL to link file
-             * @this {AJL.Config}
+             * @this {AJL.PackageConfig}
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
@@ -241,7 +163,6 @@ var AJL = (function Loader(window, document, AJL) {
                 return true;
             }
         };
-        AJL.Loader = new AJL.Loader();
     }
     return AJL;
 })(window, document, window.AJL || {});
@@ -270,10 +191,14 @@ var AJL = (function Package(window, document, AJL) {
             this.assets = assets;
             /**
              * @property config Configuration object of this Package
-             * @type {AJL.Config}
+             * @type {AJL.PackageConfig}
              */
-            this.config = new AJL.Config(params);
-            AJL.PackageManager.setPackage(this);
+            this.config = new AJL.PackageConfig(params);
+            /**
+             * @property loaded Is this package already loaded?
+             * @type {boolean}
+             */
+            this.loaded = false;
             return this;
         };
         AJL.Package.prototype = {
@@ -300,27 +225,29 @@ var AJL = (function Package(window, document, AJL) {
                         }
                     }
                 }
+                //TODO: replace it into tag callback
+                self.onPackageLoad();
             },
             /**
              * Load Package and Assets Files from this Package
-             * @returns {boolean} True if Package successful loaded
+             * @returns {boolean|AJL.Package} True if Package successful loaded
              */
             load: function () {
                 var self = this,
                     config = self.config,
                     assets = self.assets;
                 //If assets array empty then halt loading of package
-                if (AJL.Helper.isEmpty(assets)) {
+                if (AJL.Helper.isEmpty(assets) || self.isLoaded()) {
                     return false;
                 }
                 //If need to wait window.load than call lazyLoad and return
                 if (config.getItem('lazy') == true) {
                     self.lazyLoad();
-                    return true;
+                    return this;
                 }
                 //In other cases just call initLoader directly for start loading
                 self.initLoader();
-                return true;
+                return this;
             },
             /**
              * Lazy loading of package.
@@ -331,6 +258,92 @@ var AJL = (function Package(window, document, AJL) {
                 AJL.Helper.attachEvent(window, 'load', function () {
                     self.initLoader();
                 });
+            },
+            /**
+             * Check if package already loaded
+             * @returns {boolean}
+             */
+            isLoaded: function () {
+                var self = this;
+                return self.loaded;
+            },
+            /**
+             * Trigger when package fully loaded into DOM
+             */
+            onPackageLoad: function () {
+                this.loaded = true;
+            }
+        };
+    }
+    return AJL;
+})(window, document, window.AJL || {});
+var AJL = (function PackageConfig(window, document, AJL) {
+    if (!AJL.PackageConfig) {
+        /**
+         * Creating new Configuration object for {AJL.Package}
+         * @param {collection|object} params Parameters for extend default configuration
+         * @author Eugene Obrezkov
+         * @copyright 2013 MIT License
+         * @returns {AJL.PackageConfig}
+         * @constructor
+         */
+        AJL.PackageConfig = function (params) {
+            /**
+             * @property {object} options
+             * @property {boolean} options.async Asynchronous loading of package
+             * @property {boolean} options.lazy Lazy loading (load package on window.load)
+             * @property {string} options.scriptTypeAttr type-attr for script-tag
+             * @property {string} options.linkCssTypeAttr type-attr for link-tag of css
+             * @property {string} options.linkCssRelAttr rel-attr for link-tag of css
+             */
+            var options = {
+                async: true,
+                lazy: false,
+                scriptTypeAttr: 'text/javascript',
+                linkCssTypeAttr: 'text/css',
+                linkCssRelAttr: 'stylesheet'
+            };
+            this.options = AJL.Helper.extend(options, params);
+            return this;
+        };
+        AJL.PackageConfig.prototype = {
+            /**
+             * Return value from config storage by key
+             * @param {string} key Key in storage
+             * @returns {*|null} Value if success and null if not
+             */
+            getItem: function (key) {
+                var options = this.options;
+                if (options.hasOwnProperty(key)) {
+                    return options[key];
+                } else {
+                    return null;
+                }
+            },
+            /**
+             * Set item in config storage
+             * @param {string} key Key in storage
+             * @param {*} value Value what need to write
+             * @returns {AJL.PackageConfig}
+             */
+            setItem: function (key, value) {
+                var options = this.options;
+                options[key] = value;
+                return this;
+            },
+            /**
+             * Set current config variables from object
+             * @param {object} param Object which need set
+             * @returns {AJL.PackageConfig}
+             */
+            setConfigFromObject: function (param) {
+                var options = this.options;
+                for (var item in param) {
+                    if (param.hasOwnProperty(item)) {
+                        options[item] = param[item];
+                    }
+                }
+                return this;
             }
         };
     }
@@ -338,29 +351,19 @@ var AJL = (function Package(window, document, AJL) {
 })(window, document, window.AJL || {});
 var AJL = (function PackageManager(window, document, AJL) {
     if (!AJL.PackageManager) {
-        /**
-         * Package's Manager of AJL
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.PackageManager}
-         * @constructor
-         */
-        AJL.PackageManager = function () {
+        AJL.PackageManager = {
             /**
              * @property packages Object of packages in AJL
              * @type {object}
              */
-            this.packages = {};
-            return this;
-        };
-        AJL.PackageManager.prototype = {
+            _packages: {},
             /**
              * Get package from AJL
              * @param {string} name Name of package
              * @returns {boolean|AJL.Package} Package if successful and false if not
              */
             getPackage: function (name) {
-                var packages = this.packages;
+                var packages = this._packages;
                 if (packages.hasOwnProperty(name)) {
                     return packages[name];
                 }
@@ -372,7 +375,7 @@ var AJL = (function PackageManager(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             setPackage: function (pack) {
-                var packages = this.packages;
+                var packages = this._packages;
                 if (!AJL.Helper.isEmpty(pack.name)) {
                     packages[pack.name] = pack;
                     return true;
@@ -383,15 +386,33 @@ var AJL = (function PackageManager(window, document, AJL) {
              * Load all packages in AJL
              */
             loadAll: function () {
-                var packages = this.packages;
+                var packages = this._packages;
                 for (var pack in packages) {
                     if (packages.hasOwnProperty(pack)) {
                         packages[pack].load();
                     }
                 }
+            },
+            /**
+             * Load one package by name
+             * @param {string} name Name of package to load
+             * @return {boolean} True if loaded
+             */
+            loadByName: function (name) {
+                var packages = this._packages;
+                if (packages.hasOwnProperty(name)) {
+                    packages[name].load();
+                    return true;
+                }
+                return false;
+            },
+            /**
+             * Delete all packages from PackageManager
+             */
+            deleteAll: function () {
+                this._packages = {};
             }
         };
-        AJL.PackageManager = new AJL.PackageManager();
     }
     return AJL;
 })(window, document, window.AJL || {});

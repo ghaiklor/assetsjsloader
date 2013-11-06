@@ -8,32 +8,21 @@
 
 <script src="../dist/AJL.min.js"></script>
 <script>
-    new AJL.Package('Test One', [
-        'vendor/angular.js',
-        'vendor/jquery.ui.accordion.css',
-        'vendor/jquery-2.0.3.js',
-        'vendor/snap.svg.js'
-    ], {
-        lazy: true
-    });
-
-    new AJL.Package('Test Two', [
-        'vendor/underscore.js',
-        'vendor/prism.js'
-    ], {
-        async: false,
-        linkCssRelAttr: 'some_other_attr_for_link',
-        scriptTypeAttr: 'some_other_attr_for_script'
-    });
-
-    new AJL.Package('Test Three', [
-        'vendor/underscore.js'
-    ], {
-        lazy: false,
-        async: true
-    });
-
-    AJL.PackageManager.loadAll();
+    var test = new AJL.Package('test', ['vendor/underscore.js'], {lazy: true, async: false});
+    console.debug(test.isLoaded());
+    test.load();
+    console.debug(test.isLoaded());
+    test.load();
+    //    AJL.init({
+    //        name: 'Test One',
+    //        assets: ['vendor/angular.js', 'vendor/snap.svg.js'],
+    //        config: {
+    //            lazy: true
+    //        }
+    //    }, {
+    //        name: 'Test Two',
+    //        assets: ['vendor/underscore.js', 'vendor/prism.js']
+    //    });
 </script>
 </body>
 </html>

@@ -1,16 +1,6 @@
 var AJL = (function Loader(window, document, AJL) {
     if (!AJL.Loader) {
-        /**
-         * Creating Loader object
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.Loader}
-         * @constructor
-         */
-        AJL.Loader = function () {
-            return this;
-        };
-        AJL.Loader.prototype = {
+        AJL.Loader = {
             /**
              * Append Element to head
              * @param {Element} element Element which need to append
@@ -24,7 +14,7 @@ var AJL = (function Loader(window, document, AJL) {
             /**
              * Generate script tag and insert into head
              * @param {string} src URL to script file
-             * @this {AJL.Config}
+             * @this {AJL.PackageConfig}
              * @returns {boolean} True if successful
              */
             appendScriptTag: function (src) {
@@ -39,7 +29,7 @@ var AJL = (function Loader(window, document, AJL) {
             /**
              * Generate link tag and insert into head
              * @param {string} src URL to link file
-             * @this {AJL.Config}
+             * @this {AJL.PackageConfig}
              * @returns {boolean} True if successful
              */
             appendLinkTag: function (src) {
@@ -52,7 +42,6 @@ var AJL = (function Loader(window, document, AJL) {
                 return true;
             }
         };
-        AJL.Loader = new AJL.Loader();
     }
     return AJL;
 })(window, document, window.AJL || {});

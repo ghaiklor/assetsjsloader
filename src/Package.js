@@ -23,10 +23,14 @@ var AJL = (function Package(window, document, AJL) {
             this.assets = assets;
             /**
              * @property config Configuration object of this Package
-             * @type {AJL.Config}
+             * @type {AJL.PackageConfig}
              */
-            this.config = new AJL.Config(params);
-            AJL.PackageManager.setPackage(this);
+            this.config = new AJL.PackageConfig(params);
+            /**
+             * @property loaded Is this package already loaded?
+             * @type {boolean}
+             */
+            this.loaded = false;
             return this;
         };
         AJL.Package.prototype = {
@@ -53,27 +57,29 @@ var AJL = (function Package(window, document, AJL) {
                         }
                     }
                 }
+                //TODO: replace it into tag callback
+                self.onPackageLoad();
             },
             /**
              * Load Package and Assets Files from this Package
-             * @returns {boolean} True if Package successful loaded
+             * @returns {boolean|AJL.Package} True if Package successful loaded
              */
             load: function () {
                 var self = this,
                     config = self.config,
                     assets = self.assets;
                 //If assets array empty then halt loading of package
-                if (AJL.Helper.isEmpty(assets)) {
+                if (AJL.Helper.isEmpty(assets) || self.isLoaded()) {
                     return false;
                 }
                 //If need to wait window.load than call lazyLoad and return
                 if (config.getItem('lazy') == true) {
                     self.lazyLoad();
-                    return true;
+                    return this;
                 }
                 //In other cases just call initLoader directly for start loading
                 self.initLoader();
-                return true;
+                return this;
             },
             /**
              * Lazy loading of package.
@@ -84,6 +90,20 @@ var AJL = (function Package(window, document, AJL) {
                 AJL.Helper.attachEvent(window, 'load', function () {
                     self.initLoader();
                 });
+            },
+            /**
+             * Check if package already loaded
+             * @returns {boolean}
+             */
+            isLoaded: function () {
+                var self = this;
+                return self.loaded;
+            },
+            /**
+             * Trigger when package fully loaded into DOM
+             */
+            onPackageLoad: function () {
+                this.loaded = true;
             }
         };
     }

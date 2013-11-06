@@ -1,26 +1,16 @@
 var AJL = (function Helper(window, document, AJL) {
     if (!AJL.Helper) {
-        /**
-         * Creating Helper object
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.Helper}
-         * @constructor
-         */
-        AJL.Helper = function () {
+        AJL.Helper = {
             /**
-             * @property {Array} cssFiles Array of css-extensions
+             * @property {Array} _linkFiles Array of link-extensions
              * @type {Array}
              */
-            this.cssFiles = ['css'];
+            _linkFiles: ['css'],
             /**
-             * @property {Array} jsFiles Array of js-extensions
+             * @property {Array} _scriptFiles Array of script-extensions
              * @type {Array}
              */
-            this.jsFiles = ['js'];
-            return this;
-        };
-        AJL.Helper.prototype = {
+            _scriptFiles: ['js'],
             /**
              * Extend object
              * @param {object|collection} dest Destination object
@@ -49,7 +39,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is script file
              */
             isScriptFile: function (url) {
-                return this.jsFiles.indexOf(this.getExtension(url)) != -1;
+                return this._scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check if this file have css-extensions
@@ -57,7 +47,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is css file
              */
             isCssFile: function (url) {
-                return this.cssFiles.indexOf(this.getExtension(url)) != -1;
+                return this._linkFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check variable for empty
@@ -108,7 +98,6 @@ var AJL = (function Helper(window, document, AJL) {
                 }
             }
         };
-        AJL.Helper = new AJL.Helper();
     }
     return AJL;
 })(window, document, window.AJL || {});
