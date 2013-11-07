@@ -1,22 +1,36 @@
 var AJL = (function PackageManager(window, document, AJL) {
-    if (!AJL.PackageManager) {
+    if (typeof AJL.PackageManager !== 'object') {
+        var packages = {};
+
         AJL.PackageManager = {
-            /**
-             * @property packages Object of packages in AJL
-             * @type {object}
-             */
-            _packages: {},
             /**
              * Get package from AJL
              * @param {string} name Name of package
              * @returns {boolean|AJL.Package} Package if successful and false if not
              */
             getPackage: function (name) {
-                var packages = this._packages;
                 if (packages.hasOwnProperty(name)) {
                     return packages[name];
                 }
                 return false;
+            },
+            /**
+             *
+             * @param names
+             * @returns {Array}
+             */
+            getPackages: function (names) {
+                var result = [],
+                    namesLength,
+                    i;
+
+                namesLength = names.length;
+                for (i = 0; i < namesLength; i++) {
+                    if (packages.hasOwnProperty(names[i])) {
+                        result.push(packages[names[i]]);
+                    }
+                }
+                return result;
             },
             /**
              * Add package to PackageManager or rewrite exists
@@ -24,18 +38,18 @@ var AJL = (function PackageManager(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             setPackage: function (pack) {
-                var packages = this._packages;
-                if (!AJL.Helper.isEmpty(pack.name)) {
+                var helper = AJL.Helper;
+                if (!helper.isEmpty(pack.name)) {
                     packages[pack.name] = pack;
                     return true;
                 }
                 return false;
             },
+            //TODO: think about setPackages function
             /**
              * Load all packages in AJL
              */
             loadAll: function () {
-                var packages = this._packages;
                 for (var pack in packages) {
                     if (packages.hasOwnProperty(pack)) {
                         packages[pack].load();
@@ -48,7 +62,6 @@ var AJL = (function PackageManager(window, document, AJL) {
              * @return {boolean} True if loaded
              */
             loadByName: function (name) {
-                var packages = this._packages;
                 if (packages.hasOwnProperty(name)) {
                     packages[name].load();
                     return true;
@@ -56,10 +69,20 @@ var AJL = (function PackageManager(window, document, AJL) {
                 return false;
             },
             /**
-             * Delete all packages from PackageManager
+             *
+             * @param names
              */
-            deleteAll: function () {
-                this._packages = {};
+            loadByNames: function (names) {
+                var i,
+                    namesLength;
+
+                namesLength = names.length;
+                for (i = 0; i < namesLength; i++) {
+                    if (packages.hasOwnProperty(names[i])) {
+                        packages[names[i]].load();
+                    }
+                }
+                return this;
             }
         };
     }

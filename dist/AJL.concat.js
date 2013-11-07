@@ -1,34 +1,37 @@
-/*! AssetsJSLoader - v0.1.0 - 2013-11-06
+/*! AssetsJSLoader - v0.1.0 - 2013-11-07
 * http://ghaiklor.github.io/assetsjsloader/
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
+//TODO: make namespaces
 var AJL = (function (window, document, AJL) {
-    AJL.init = function () {
-        var currentPackage = {};
-        var currentArg = {};
-        for (var pack in arguments) {
-            if (arguments.hasOwnProperty(pack)) {
-                currentArg = arguments[pack];
-                currentPackage = new AJL.Package(currentArg.name, currentArg.assets, currentArg.config);
-                AJL.PackageManager.setPackage(currentPackage);
+    if (typeof AJL !== 'function') {
+        AJL = function () {
+            var packageManager = AJL.PackageManager,
+                curPackage = {},
+                curName = '',
+                curAssets = [],
+                curConfig = {};
+
+            for (var item in arguments) {
+                if (arguments.hasOwnProperty(item)) {
+                    curName = arguments[item].name;
+                    curAssets = arguments[item].assets;
+                    curConfig = arguments[item].config;
+                    curPackage = new AJL.Package(curName, curAssets, curConfig);
+                    packageManager.setPackage(curPackage);
+                }
             }
-        }
-        return AJL.PackageManager;
-    };
+
+            return packageManager;
+        };
+    }
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function Helper(window, document, AJL) {
-    if (!AJL.Helper) {
+    if (typeof AJL.Helper !== 'object') {
+        var linkFiles = ['css'];
+        var scriptFiles = ['js'];
+
         AJL.Helper = {
-            /**
-             * @property {Array} _linkFiles Array of link-extensions
-             * @type {Array}
-             */
-            _linkFiles: ['css'],
-            /**
-             * @property {Array} _scriptFiles Array of script-extensions
-             * @type {Array}
-             */
-            _scriptFiles: ['js'],
             /**
              * Extend object
              * @param {object|collection} dest Destination object
@@ -57,7 +60,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is script file
              */
             isScriptFile: function (url) {
-                return this._scriptFiles.indexOf(this.getExtension(url)) != -1;
+                return scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check if this file have css-extensions
@@ -65,7 +68,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is css file
              */
             isCssFile: function (url) {
-                return this._linkFiles.indexOf(this.getExtension(url)) != -1;
+                return linkFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check variable for empty
@@ -120,18 +123,8 @@ var AJL = (function Helper(window, document, AJL) {
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function Loader(window, document, AJL) {
-    if (!AJL.Loader) {
+    if (typeof AJL.Loader !== 'object') {
         AJL.Loader = {
-            /**
-             * Append Element to head
-             * @param {Element} element Element which need to append
-             * @returns {AJL.Loader}
-             */
-            appendToHead: function (element) {
-                var head = document.getElementsByTagName('head')[0];
-                head.appendChild(element);
-                return this;
-            },
             /**
              * Generate script tag and insert into head
              * @param {string} src URL to script file
@@ -144,7 +137,7 @@ var AJL = (function Loader(window, document, AJL) {
                 tag.type = config.getItem('scriptTypeAttr');
                 tag.async = config.getItem('async');
                 tag.src = src;
-                AJL.Loader.appendToHead(tag);
+                appendToHead(tag);
                 return true;
             },
             /**
@@ -159,15 +152,25 @@ var AJL = (function Loader(window, document, AJL) {
                 tag.rel = config.getItem('linkCssRelAttr');
                 tag.type = config.getItem('linkCssTypeAttr');
                 tag.href = src;
-                AJL.Loader.appendToHead(tag);
+                appendToHead(tag);
                 return true;
             }
         };
+        /**
+         * Append Element to head
+         * @param {Element} element Element which need to append
+         * @returns {boolean}
+         */
+        function appendToHead(element) {
+            var head = document.getElementsByTagName('head')[0];
+            head.appendChild(element);
+            return true;
+        }
     }
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function Package(window, document, AJL) {
-    if (!AJL.Package) {
+    if (typeof AJL.Package !== 'function') {
         /**
          * Creating new Package
          * @author Eugene Obrezkov
@@ -203,61 +206,26 @@ var AJL = (function Package(window, document, AJL) {
         };
         AJL.Package.prototype = {
             /**
-             * Init generating and append tags into head.
-             * Call methods from {AJL.Loader}
-             */
-            initLoader: function () {
-                var self = this,
-                    assets = self.assets,
-                    config = self.config,
-                    currentUrl = '';
-                for (var url in assets) {
-                    if (assets.hasOwnProperty(url)) {
-                        currentUrl = assets[url];
-                        if (AJL.Helper.isScriptFile(currentUrl)) {
-                            //We need use call 'cause Loader must execute in context of current package's config
-                            AJL.Loader.appendScriptTag.call(config, currentUrl);
-                            continue;
-                        }
-                        if (AJL.Helper.isCssFile(currentUrl)) {
-                            //We need use call 'cause Loader must execute in context of current package's config
-                            AJL.Loader.appendLinkTag.call(config, currentUrl);
-                        }
-                    }
-                }
-                //TODO: replace it into tag callback
-                self.onPackageLoad();
-            },
-            /**
              * Load Package and Assets Files from this Package
              * @returns {boolean|AJL.Package} True if Package successful loaded
              */
             load: function () {
                 var self = this,
                     config = self.config,
-                    assets = self.assets;
+                    assets = self.assets,
+                    helper = AJL.Helper;
                 //If assets array empty then halt loading of package
-                if (AJL.Helper.isEmpty(assets) || self.isLoaded()) {
+                if (helper.isEmpty(assets) || self.isLoaded()) {
                     return false;
                 }
                 //If need to wait window.load than call lazyLoad and return
                 if (config.getItem('lazy') == true) {
-                    self.lazyLoad();
+                    lazyLoad();
                     return this;
                 }
                 //In other cases just call initLoader directly for start loading
-                self.initLoader();
+                initLoader();
                 return this;
-            },
-            /**
-             * Lazy loading of package.
-             * This method attachEvent window.onload by {AJL.Helper.attachEvent}
-             */
-            lazyLoad: function () {
-                var self = this;
-                AJL.Helper.attachEvent(window, 'load', function () {
-                    self.initLoader();
-                });
             },
             /**
              * Check if package already loaded
@@ -274,11 +242,48 @@ var AJL = (function Package(window, document, AJL) {
                 this.loaded = true;
             }
         };
+        /**
+         * Lazy loading of package.
+         * This method attachEvent window.onload by {AJL.Helper.attachEvent}
+         */
+        function lazyLoad() {
+            var helper = AJL.Helper;
+            helper.attachEvent(window, 'load', function () {
+                initLoader();
+            });
+        }
+
+        /**
+         * Init generating and append tags into head.
+         * Call methods from {AJL.Loader}
+         */
+        function initLoader() {
+            var self = this,
+                assets = self.assets,
+                config = self.config,
+                currentUrl = '';
+            for (var url in assets) {
+                if (assets.hasOwnProperty(url)) {
+                    currentUrl = assets[url];
+                    if (AJL.Helper.isScriptFile(currentUrl)) {
+                        //We need use call 'cause Loader must execute in context of current package's config
+                        AJL.Loader.appendScriptTag.call(config, currentUrl);
+                        continue;
+                    }
+                    if (AJL.Helper.isCssFile(currentUrl)) {
+                        //We need use call 'cause Loader must execute in context of current package's config
+                        AJL.Loader.appendLinkTag.call(config, currentUrl);
+                    }
+                }
+            }
+            //TODO: replace it into tag callback
+            //self.onPackageLoad();
+        }
     }
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function PackageConfig(window, document, AJL) {
-    if (!AJL.PackageConfig) {
+    if (typeof AJL.PackageConfig !== 'function') {
         /**
          * Creating new Configuration object for {AJL.Package}
          * @param {collection|object} params Parameters for extend default configuration
@@ -297,13 +302,14 @@ var AJL = (function PackageConfig(window, document, AJL) {
              * @property {string} options.linkCssRelAttr rel-attr for link-tag of css
              */
             var options = {
-                async: true,
-                lazy: false,
-                scriptTypeAttr: 'text/javascript',
-                linkCssTypeAttr: 'text/css',
-                linkCssRelAttr: 'stylesheet'
-            };
-            this.options = AJL.Helper.extend(options, params);
+                    async: true,
+                    lazy: false,
+                    scriptTypeAttr: 'text/javascript',
+                    linkCssTypeAttr: 'text/css',
+                    linkCssRelAttr: 'stylesheet'
+                },
+                helper = AJL.Helper;
+            this.options = helper.extend(options, params);
             return this;
         };
         AJL.PackageConfig.prototype = {
@@ -350,24 +356,38 @@ var AJL = (function PackageConfig(window, document, AJL) {
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function PackageManager(window, document, AJL) {
-    if (!AJL.PackageManager) {
+    if (typeof AJL.PackageManager !== 'object') {
+        var packages = {};
+
         AJL.PackageManager = {
-            /**
-             * @property packages Object of packages in AJL
-             * @type {object}
-             */
-            _packages: {},
             /**
              * Get package from AJL
              * @param {string} name Name of package
              * @returns {boolean|AJL.Package} Package if successful and false if not
              */
             getPackage: function (name) {
-                var packages = this._packages;
                 if (packages.hasOwnProperty(name)) {
                     return packages[name];
                 }
                 return false;
+            },
+            /**
+             *
+             * @param names
+             * @returns {Array}
+             */
+            getPackages: function (names) {
+                var result = [],
+                    namesLength,
+                    i;
+
+                namesLength = names.length;
+                for (i = 0; i < namesLength; i++) {
+                    if (packages.hasOwnProperty(names[i])) {
+                        result.push(packages[names[i]]);
+                    }
+                }
+                return result;
             },
             /**
              * Add package to PackageManager or rewrite exists
@@ -375,18 +395,18 @@ var AJL = (function PackageManager(window, document, AJL) {
              * @returns {boolean} True if successful
              */
             setPackage: function (pack) {
-                var packages = this._packages;
-                if (!AJL.Helper.isEmpty(pack.name)) {
+                var helper = AJL.Helper;
+                if (!helper.isEmpty(pack.name)) {
                     packages[pack.name] = pack;
                     return true;
                 }
                 return false;
             },
+            //TODO: think about setPackages function
             /**
              * Load all packages in AJL
              */
             loadAll: function () {
-                var packages = this._packages;
                 for (var pack in packages) {
                     if (packages.hasOwnProperty(pack)) {
                         packages[pack].load();
@@ -399,7 +419,6 @@ var AJL = (function PackageManager(window, document, AJL) {
              * @return {boolean} True if loaded
              */
             loadByName: function (name) {
-                var packages = this._packages;
                 if (packages.hasOwnProperty(name)) {
                     packages[name].load();
                     return true;
@@ -407,10 +426,20 @@ var AJL = (function PackageManager(window, document, AJL) {
                 return false;
             },
             /**
-             * Delete all packages from PackageManager
+             *
+             * @param names
              */
-            deleteAll: function () {
-                this._packages = {};
+            loadByNames: function (names) {
+                var i,
+                    namesLength;
+
+                namesLength = names.length;
+                for (i = 0; i < namesLength; i++) {
+                    if (packages.hasOwnProperty(names[i])) {
+                        packages[names[i]].load();
+                    }
+                }
+                return this;
             }
         };
     }

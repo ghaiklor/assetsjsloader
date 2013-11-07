@@ -1,16 +1,9 @@
 var AJL = (function Helper(window, document, AJL) {
-    if (!AJL.Helper) {
+    if (typeof AJL.Helper !== 'object') {
+        var linkFiles = ['css'];
+        var scriptFiles = ['js'];
+
         AJL.Helper = {
-            /**
-             * @property {Array} _linkFiles Array of link-extensions
-             * @type {Array}
-             */
-            _linkFiles: ['css'],
-            /**
-             * @property {Array} _scriptFiles Array of script-extensions
-             * @type {Array}
-             */
-            _scriptFiles: ['js'],
             /**
              * Extend object
              * @param {object|collection} dest Destination object
@@ -39,7 +32,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is script file
              */
             isScriptFile: function (url) {
-                return this._scriptFiles.indexOf(this.getExtension(url)) != -1;
+                return scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check if this file have css-extensions
@@ -47,7 +40,7 @@ var AJL = (function Helper(window, document, AJL) {
              * @returns {boolean} True if is css file
              */
             isCssFile: function (url) {
-                return this._linkFiles.indexOf(this.getExtension(url)) != -1;
+                return linkFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check variable for empty

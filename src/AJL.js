@@ -1,15 +1,25 @@
+//TODO: make namespaces
 var AJL = (function (window, document, AJL) {
-    AJL.init = function () {
-        var currentPackage = {};
-        var currentArg = {};
-        for (var pack in arguments) {
-            if (arguments.hasOwnProperty(pack)) {
-                currentArg = arguments[pack];
-                currentPackage = new AJL.Package(currentArg.name, currentArg.assets, currentArg.config);
-                AJL.PackageManager.setPackage(currentPackage);
+    if (typeof AJL !== 'function') {
+        AJL = function () {
+            var packageManager = AJL.PackageManager,
+                curPackage = {},
+                curName = '',
+                curAssets = [],
+                curConfig = {};
+
+            for (var item in arguments) {
+                if (arguments.hasOwnProperty(item)) {
+                    curName = arguments[item].name;
+                    curAssets = arguments[item].assets;
+                    curConfig = arguments[item].config;
+                    curPackage = new AJL.Package(curName, curAssets, curConfig);
+                    packageManager.setPackage(curPackage);
+                }
             }
-        }
-        return AJL.PackageManager;
-    };
+
+            return packageManager;
+        };
+    }
     return AJL;
 })(window, document, window.AJL || {});

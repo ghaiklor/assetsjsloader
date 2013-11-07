@@ -1,16 +1,6 @@
 var AJL = (function Loader(window, document, AJL) {
-    if (!AJL.Loader) {
+    if (typeof AJL.Loader !== 'object') {
         AJL.Loader = {
-            /**
-             * Append Element to head
-             * @param {Element} element Element which need to append
-             * @returns {AJL.Loader}
-             */
-            appendToHead: function (element) {
-                var head = document.getElementsByTagName('head')[0];
-                head.appendChild(element);
-                return this;
-            },
             /**
              * Generate script tag and insert into head
              * @param {string} src URL to script file
@@ -23,7 +13,7 @@ var AJL = (function Loader(window, document, AJL) {
                 tag.type = config.getItem('scriptTypeAttr');
                 tag.async = config.getItem('async');
                 tag.src = src;
-                AJL.Loader.appendToHead(tag);
+                appendToHead(tag);
                 return true;
             },
             /**
@@ -38,10 +28,20 @@ var AJL = (function Loader(window, document, AJL) {
                 tag.rel = config.getItem('linkCssRelAttr');
                 tag.type = config.getItem('linkCssTypeAttr');
                 tag.href = src;
-                AJL.Loader.appendToHead(tag);
+                appendToHead(tag);
                 return true;
             }
         };
+        /**
+         * Append Element to head
+         * @param {Element} element Element which need to append
+         * @returns {boolean}
+         */
+        function appendToHead(element) {
+            var head = document.getElementsByTagName('head')[0];
+            head.appendChild(element);
+            return true;
+        }
     }
     return AJL;
 })(window, document, window.AJL || {});

@@ -1,5 +1,5 @@
 var AJL = (function PackageConfig(window, document, AJL) {
-    if (!AJL.PackageConfig) {
+    if (typeof AJL.PackageConfig !== 'function') {
         /**
          * Creating new Configuration object for {AJL.Package}
          * @param {collection|object} params Parameters for extend default configuration
@@ -18,13 +18,14 @@ var AJL = (function PackageConfig(window, document, AJL) {
              * @property {string} options.linkCssRelAttr rel-attr for link-tag of css
              */
             var options = {
-                async: true,
-                lazy: false,
-                scriptTypeAttr: 'text/javascript',
-                linkCssTypeAttr: 'text/css',
-                linkCssRelAttr: 'stylesheet'
-            };
-            this.options = AJL.Helper.extend(options, params);
+                    async: true,
+                    lazy: false,
+                    scriptTypeAttr: 'text/javascript',
+                    linkCssTypeAttr: 'text/css',
+                    linkCssRelAttr: 'stylesheet'
+                },
+                helper = AJL.Helper;
+            this.options = helper.extend(options, params);
             return this;
         };
         AJL.PackageConfig.prototype = {
