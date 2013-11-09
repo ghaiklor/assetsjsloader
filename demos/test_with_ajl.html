@@ -8,21 +8,16 @@
 
 <script src="../dist/AJL.concat.js"></script>
 <script>
-    var test = new AJL.Package('test', ['vendor/underscore.js'], {lazy: true, async: false});
-    console.debug(test.isLoaded());
-    test.load();
-    console.debug(test.isLoaded());
-    test.load();
-    //    AJL.init({
-    //        name: 'Test One',
-    //        assets: ['vendor/angular.js', 'vendor/snap.svg.js'],
-    //        config: {
-    //            lazy: true
-    //        }
-    //    }, {
-    //        name: 'Test Two',
-    //        assets: ['vendor/underscore.js', 'vendor/prism.js']
-    //    });
+    AJL({
+        name: 'Test One',
+        assets: ['vendor/angular.js', 'vendor/snap.svg.js'],
+        config: {
+            lazy: true
+        }
+    }, {
+        name: 'Test Two',
+        assets: ['vendor/underscore.js', 'vendor/prism.js']
+    }).loadAll();
 </script>
 </body>
 </html>
