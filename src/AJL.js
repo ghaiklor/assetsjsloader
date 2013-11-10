@@ -6,6 +6,7 @@ var AJL = (function (window, document, AJL) {
      */
     AJL = function () {
         var packageManager = AJL.PackageManager,
+            namespace = AJL.Namespace,
             curPackage = {},
             curName = '',
             curAssets = [],
@@ -18,7 +19,7 @@ var AJL = (function (window, document, AJL) {
             //And first one is string and second object or function
             if (typeof arguments[0] == "string" && (typeof arguments[1] == "object" || typeof arguments[1] == "function")) {
                 //Then I think that it's namespace setting
-                setNamespace(arguments[0], arguments[1]);
+                namespace.setNamespace(arguments[0], arguments[1]);
                 return true;
             }
         }
@@ -48,27 +49,24 @@ var AJL = (function (window, document, AJL) {
         return packageManager;
     };
 
-    function setNamespace(namespace, module) {
-        var parts = namespace.split('.'),
-            parent = window,
-            partsLength,
-            curPart,
+    function getEntryPointUrl() {
+        var scripts = document.getElementsByTagName('script'),
+            entryPointUrl,
             i;
-
-        //Need iterate all parts of namespace without last one
-        partsLength = parts.length - 1;
-        for (i = 0; i < partsLength; i++) {
-            curPart = parts[i];
-            if (typeof parent[curPart] === 'undefined') {
-                parent[curPart] = {};
+        for (i = 0; i < scripts.length; i++) {
+            //TODO: make sure that this will work 100%
+            entryPointUrl = scripts[i].getAttribute('data-ep');
+            if (entryPointUrl) {
+                return entryPointUrl;
             }
-            parent = parent[curPart];
         }
-        //And last one of parts need to be filled by module param
-        parent[parts[partsLength]] = module;
-        //And not forgot return generated namespace to global scope
-        return parent;
+        return false;
     }
+
+    //TODO: think about waiting for loading AJL.Loader
+    setTimeout(function () {
+        AJL.Loader.appendScriptTag(getEntryPointUrl());
+    }, 100);
 
     return AJL;
 })(window, document, window.AJL || {});
