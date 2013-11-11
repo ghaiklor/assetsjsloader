@@ -1,4 +1,4 @@
-/*! AssetsJSLoader - v0.1.0 - 2013-11-10
+/*! AssetsJSLoader - v0.1.0 - 2013-11-11
 * http://ghaiklor.github.io/assetsjsloader/
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
 var AJL = (function (window, document, AJL) {
@@ -268,6 +268,24 @@ var AJL = (function (window, document, AJL) {
                 return obj != null && obj == obj.window;
             },
             /**
+             * Check if val exists in array
+             * @param val Value which we search
+             * @param arr Array where we search
+             * @returns {boolean} True if exists and false if not
+             */
+            isExistsInArray: function (val, arr) {
+                var i;
+
+                for (i in arr) {
+                    if (arr.hasOwnProperty(i)) {
+                        if (arr[i] == val) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            },
+            /**
              * Attach event to object
              * @param {*} obj Object on which need attach event
              * @param {string} type Type of event
@@ -463,6 +481,10 @@ var AJL = (function (window, document, AJL) {
                 if (helper.isEmpty(assets)) {
                     return false;
                 }
+                //If this package depend with other package than load dependencies first
+                if (!AJL.Helper.isEmpty(config.getItem('dependMap'))) {
+                    loadDependencies.call(config);
+                }
                 //If need to wait window.load than call lazyLoad and return
                 if (config.getItem('lazy') == true) {
                     lazyLoad.call(this);
@@ -524,9 +546,19 @@ var AJL = (function (window, document, AJL) {
         }
 
         /**
+         * Load dependencies of current package
+         * @this {AJL.PackageConfig}
+         */
+        function loadDependencies() {
+            //TODO: make loading dependencies
+            var config = this;
+        }
+
+        /**
          * Trigger when package fully loaded into DOM
          */
         function onPackageLoad() {
+            //TODO: make working loaded status of package
             this.loaded = true;
         }
     }
@@ -555,11 +587,21 @@ var AJL = (function (window, document, AJL) {
                 options = {
                     async: true,
                     lazy: false,
+                    depend: [],
+                    dependMap: [],
                     scriptTypeAttr: 'text/javascript',
                     linkCssTypeAttr: 'text/css',
                     linkCssRelAttr: 'stylesheet'
-                };
+                },
+                dependArray;
             this.options = helper.extend(options, params);
+
+            //If dependencies not empty then build depend-map
+            dependArray = this.getItem('depend');
+            if (!AJL.Helper.isEmpty(dependArray)) {
+                buildDependMap.call(this, dependArray);
+            }
+
             return this;
         };
         AJL.PackageConfig.prototype = {
@@ -602,6 +644,40 @@ var AJL = (function (window, document, AJL) {
                 return this;
             }
         };
+
+        /**
+         * Build dependencies map for this package
+         * @this {AJL.PackageConfig}
+         * @param packagesNameArray Array of packages name
+         */
+        function buildDependMap(packagesNameArray) {
+            var config = this,
+                resultDependMap = [],
+                curPack,
+                curAsset,
+                indexPackage,
+                indexAssets;
+
+            //Loop through all packageNames
+            for (indexPackage in packagesNameArray) {
+                if (packagesNameArray.hasOwnProperty(indexPackage)) {
+                    //Get Package Object for current packageName
+                    curPack = AJL.PackageManager.getPackage(packagesNameArray[indexPackage]);
+                    for (indexAssets = 0; indexAssets < curPack.assets.length; indexAssets++) {
+                        //Loop through all assets in currently selected package
+                        curAsset = curPack.assets[indexAssets];
+                        //If this asset already exists in dependency map then don't add it into map
+                        if (AJL.Helper.isExistsInArray(curAsset, resultDependMap)) {
+                            continue;
+                        }
+                        //In other case add this asset into resulting map array
+                        resultDependMap.push(curPack.assets[indexAssets]);
+                    }
+                }
+            }
+            //And finally set generated dependency map to config of current package
+            config.setItem('dependMap', resultDependMap);
+        }
     }
     return AJL;
 })(window, document, window.AJL || {});

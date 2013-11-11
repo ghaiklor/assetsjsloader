@@ -49,6 +49,10 @@ var AJL = (function (window, document, AJL) {
                 if (helper.isEmpty(assets)) {
                     return false;
                 }
+                //If this package depend with other package than load dependencies first
+                if (!AJL.Helper.isEmpty(config.getItem('dependMap'))) {
+                    loadDependencies.call(config);
+                }
                 //If need to wait window.load than call lazyLoad and return
                 if (config.getItem('lazy') == true) {
                     lazyLoad.call(this);
@@ -110,9 +114,19 @@ var AJL = (function (window, document, AJL) {
         }
 
         /**
+         * Load dependencies of current package
+         * @this {AJL.PackageConfig}
+         */
+        function loadDependencies() {
+            //TODO: make loading dependencies
+            var config = this;
+        }
+
+        /**
          * Trigger when package fully loaded into DOM
          */
         function onPackageLoad() {
+            //TODO: make working loaded status of package
             this.loaded = true;
         }
     }

@@ -192,6 +192,24 @@ var AJL = (function (window, document, AJL) {
                 return obj != null && obj == obj.window;
             },
             /**
+             * Check if val exists in array
+             * @param val Value which we search
+             * @param arr Array where we search
+             * @returns {boolean} True if exists and false if not
+             */
+            isExistsInArray: function (val, arr) {
+                var i;
+
+                for (i in arr) {
+                    if (arr.hasOwnProperty(i)) {
+                        if (arr[i] == val) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            },
+            /**
              * Attach event to object
              * @param {*} obj Object on which need attach event
              * @param {string} type Type of event
