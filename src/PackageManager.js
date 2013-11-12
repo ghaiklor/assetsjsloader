@@ -11,12 +11,10 @@ var AJL = (function (window, document, AJL) {
             getPackage: function (name) {
                 var helper = AJL.Helper;
 
-                if (packages.hasOwnProperty(name)) {
-                    if (helper.isInstanceOf(packages[name], AJL.Package)) {
-                        return packages[name];
-                    }
-                    return false;
+                if (packages.hasOwnProperty(name) && helper.isInstanceOf(packages[name], AJL.Package)) {
+                    return packages[name];
                 }
+
                 return false;
             },
             /**
@@ -25,64 +23,70 @@ var AJL = (function (window, document, AJL) {
              * @returns {Array}
              */
             getPackages: function (names) {
-                var helper = AJL.Helper,
-                    result = [],
-                    namesLength,
+                var self = this,
+                    packageArray = [],
+                    namesLength = names.length,
+                    curName,
+                    curPackage,
                     i;
 
-                namesLength = names.length;
                 for (i = 0; i < namesLength; i++) {
-                    if (packages.hasOwnProperty(names[i])) {
-                        if (helper.isInstanceOf(packages[names[i]], AJL.Package)) {
-                            result.push(packages[names[i]]);
-                        }
+                    curName = names[i];
+                    curPackage = self.getPackage(curName);
+                    if (curPackage) {
+                        packageArray.push(curPackage);
                     }
                 }
-                return result;
+
+                return packageArray;
             },
             /**
              * Add package to PackageManager or rewrite exists
-             * @param {Package} pack Package what need to add
-             * @returns {boolean|PackageManager} True if successful
+             * @param {AJL.Package} pack Package what need to add
+             * @returns {boolean|AJL.PackageManager} True if successful
              */
             setPackage: function (pack) {
-                var helper = AJL.Helper;
-                if (!helper.isEmpty(pack.name) && helper.isInstanceOf(pack, AJL.Package)) {
-                    packages[pack.name] = pack;
+                var helper = AJL.Helper,
+                    packName;
+
+                packName = pack.getName();
+                if (!helper.isEmpty(packName) && helper.isInstanceOf(pack, AJL.Package)) {
+                    packages[packName] = pack;
+
                     return this;
                 }
+
                 return false;
             },
             /**
              * Set packages to PackageManager
              * @param packs
-             * @returns {PackageManager}
+             * @returns {AJL.PackageManager}
              */
             setPackages: function (packs) {
-                var helper = AJL.Helper,
-                    pack;
+                var self = this,
+                    helper = AJL.Helper,
+                    curPack,
+                    item;
 
-                for (pack in packs) {
-                    if (packs.hasOwnProperty(pack)) {
-                        if (helper.isInstanceOf(packs[pack], AJL.Package)) {
-                            packages[pack[packs].name] = pack;
-                        }
+                for (item in packs) {
+                    if (packs.hasOwnProperty(item) && helper.isInstanceOf(packs[item], AJL.Package)) {
+                        curPack = packs[item];
+                        self.setPackage(curPack);
                     }
                 }
                 return this;
             },
             /**
              * Load all packages in AJL
-             * @return {PackageManager}
+             * @return {AJL.PackageManager}
              */
             loadAll: function () {
                 var helper = AJL.Helper;
 
                 for (var pack in packages) {
-                    if (packages.hasOwnProperty(pack)) {
-                        if (helper.isInstanceOf(packages[pack], AJL.Package)) {
-                            packages[pack].load();
-                        }
+                    if (packages.hasOwnProperty(pack) && helper.isInstanceOf(packages[pack], AJL.Package)) {
+                        packages[pack].load();
                     }
                 }
                 return this;
@@ -90,7 +94,7 @@ var AJL = (function (window, document, AJL) {
             /**
              * Load one package by name
              * @param {string} name Name of package to load
-             * @return {boolean|PackageManager} True if loaded
+             * @return {boolean|AJL.PackageManager} True if loaded
              */
             loadByName: function (name) {
                 var helper = AJL.Helper;

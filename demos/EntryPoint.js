@@ -12,4 +12,4 @@ AJL({
         lazy: false,
         depend: ['jQuery 2.0.3', 'Backbone']
     }
-}).loadAll();
+});

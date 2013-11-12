@@ -191,6 +191,9 @@ var AJL = (function (window, document, AJL) {
             isWindow: function (obj) {
                 return obj != null && obj == obj.window;
             },
+            isString: function (param) {
+                return this.classType(param) === "string";
+            },
             /**
              * Check if val exists in array
              * @param val Value which we search
