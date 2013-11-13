@@ -6,12 +6,22 @@ var AJL = (function (window, document, AJL) {
             coreHasOwn = Object.prototype.hasOwnProperty,
             class2Type = {};
 
+        /**
+         * @namespace AJL.Helper
+         */
         AJL.Helper = {
             /**
              * Iterate through obj
-             * @param obj Object where need to iterate
-             * @param callback Function which was working while iterate
-             * @returns {*}
+             * @param {Array|Object|Collection} obj Object where need to iterate
+             * @param {Function} callback Function which was working while iterate
+             * @returns {Array|Object|Collection}
+             * @example
+             * AJL.Helper.each({
+             *      foo: 'foo',
+             *      bar: 'bar'
+             * }, function(key, value) {
+             *      console.log(key, value);
+             * });
              */
             each: function (obj, callback) {
                 var i = 0,
@@ -26,84 +36,53 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Extend object
-             * @returns {object|collection} Resulting object
+             * @param {Array|Collection|Object} target Target
+             * @param {Array|Collection|Object} object Object from extending
+             * @returns {Object|Collection} Resulting object
+             * @example
+             * AJL.Helper.extend({
+             *      foo: 'foo'
+             * }, {
+             *      bar: function() {
+             *          console.log("I'm a bar function");
+             *      }
+             * });
              */
-            extend: function () {
-                var options,
-                    name,
-                    src,
-                    copy,
-                    copyIsArray,
-                    clone,
-                    target = arguments[0] || {},
-                    i = 1,
-                    length = arguments.length,
-                    deep = false;
-
-                if (typeof target === "boolean") {
-                    deep = target;
-                    target = arguments[1] || {};
-                    i = 2;
-                }
-
-                if (typeof target !== "object" && !this.isFunction(target)) {
-                    target = {};
-                }
-
-                if (length === i) {
-                    target = this;
-                    --i;
-                }
-
-                for (; i < length; i++) {
-                    if ((options = arguments[i]) != null) {
-                        for (name in options) {
-                            if (options.hasOwnProperty(name)) {
-                                src = target[name];
-                                copy = options[name];
-
-                                if (target === copy) {
-                                    continue;
-                                }
-
-                                if (deep && copy && ( this.isObject(copy) || (copyIsArray = this.isArray(copy)) )) {
-                                    if (copyIsArray) {
-                                        copyIsArray = false;
-                                        clone = src && this.isArray(src) ? src : [];
-                                    } else {
-                                        clone = src && this.isObject(src) ? src : {};
-                                    }
-                                    target[ name ] = this.extend(deep, clone, copy);
-                                } else if (copy !== undefined) {
-                                    target[ name ] = copy;
-                                }
-                            }
-                        }
+            extend: function (target, object) {
+                var item;
+                for (item in object) {
+                    if (object.hasOwnProperty(item)) {
+                        target[item] = object[item];
                     }
                 }
-
                 return target;
             },
             /**
              * Get extension of filename
-             * @param {string} fileName Filename from we need get extension
-             * @returns {string} Extension of file
+             * @param {String} fileName Filename from we need get extension
+             * @returns {String} Extension of file
+             * @example
+             * AJL.Helper.getExtension('SomeFileName.js');
              */
             getExtension: function (fileName) {
                 return fileName.split('.').pop();
             },
             /**
              * Check if this file have js-extensions
-             * @param {string} url URL of file that need to check
-             * @returns {boolean} True if is script file
+             * @param {String} url URL of file that need to check
+             * @returns {Boolean} True if is script file
+             * @example
+             * AJL.Helper.isScriptFile('MyScript.js');
              */
             isScriptFile: function (url) {
                 return scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check if this file have css-extensions
-             * @param {string} url URL of file that need to check
-             * @returns {boolean} True if is css file
+             * @param {String} url URL of file that need to check
+             * @returns {Boolean} True if is css file
+             * @example
+             * AJL.Helper.isCssFile('SomeStyles.css');
              */
             isCssFile: function (url) {
                 return linkFiles.indexOf(this.getExtension(url)) != -1;
@@ -111,23 +90,29 @@ var AJL = (function (window, document, AJL) {
             /**
              * Check variable for empty
              * @param {*} param Variable that need to check
-             * @returns {boolean} True if empty
+             * @returns {Boolean} True if empty
+             * @example
+             * AJL.Helper.isEmpty([]);
              */
             isEmpty: function (param) {
-                return param == undefined || param == null || param == '' || param.length == 0;
+                return this.isUndefined(param) || param == '' || param.length == 0;
             },
             /**
              * Check variable for undefined or null
              * @param {*} param Variable that need to check
-             * @returns {boolean} True if undefined or null
+             * @returns {Boolean} True if undefined or null
+             * @example
+             * AJL.Helper.isUndefined(undefined);
              */
             isUndefined: function (param) {
                 return param == undefined || param == null;
             },
             /**
              * Get type of obj in string
-             * @param obj Object from which need get type
-             * @returns {string}
+             * @param {*} obj Variable from which need get type
+             * @returns {String} Type of variable
+             * @example
+             * AJL.Helper.classType(['Hi', 'I am array']);
              */
             classType: function (obj) {
                 return obj == null ? String(obj) : class2Type[coreToString.call(obj)] || "object";
@@ -135,7 +120,9 @@ var AJL = (function (window, document, AJL) {
             /**
              * Check if it is object
              * @param obj Object which need check
-             * @returns {boolean}
+             * @returns {boolean} True if this object
+             * @example
+             * AJL.Helper.isObject(['No', 'Not object']);
              */
             isObject: function (obj) {
                 var key;
@@ -151,15 +138,19 @@ var AJL = (function (window, document, AJL) {
                 } catch (Exception) {
                     return false;
                 }
+
                 for (key in obj) {
                 }
+
                 return key === undefined || coreHasOwn.call(obj, key);
             },
             /**
-             * Check if is Object instanceof Of object
-             * @param instance
-             * @param obj
-             * @returns {boolean}
+             * Check if variable instanceof of object
+             * @param {*} instance Instance that need to check
+             * @param {*} obj Object
+             * @returns {boolean} True if Instance instanceof Obj
+             * @example
+             * AJL.Helper.isInstanceOf(myPackage, AJL.Package);
              */
             isInstanceOf: function (instance, obj) {
                 if (this.isUndefined(instance) || this.isUndefined(obj)) {
@@ -168,29 +159,46 @@ var AJL = (function (window, document, AJL) {
                 return (instance instanceof obj);
             },
             /**
-             * Check if obj is function
-             * @param obj What need check
-             * @returns {boolean}
+             * Check if variable is function
+             * @param {*} obj What need check
+             * @returns {boolean} True if this function
+             * @example
+             * AJL.Helper.isFunction(function() {
+             *      console.log("Yes, it's function");
+             * });
              */
             isFunction: function (obj) {
                 return this.classType(obj) === "function";
             },
             /**
-             * Check ib obj is array
+             * Check ib variable is array
              * @param obj What need check
-             * @returns {boolean}
+             * @returns {boolean} True if it's array
+             * @example
+             * AJL.Helper.isArray("No, it's not");
              */
             isArray: function (obj) {
                 return this.classType(obj) === 'array';
             },
             /**
-             * Check if obj is global scoped window object
+             * Check if variable is global scoped window object
              * @param obj What need check
-             * @returns {boolean}
+             * @returns {boolean} True if this window
+             * @example
+             * AJL.Helper.isWindow({
+             *      no: 'not window object'
+             * });
              */
             isWindow: function (obj) {
                 return obj != null && obj == obj.window;
             },
+            /**
+             * Check if variable is string type
+             * @param {*} param What need check
+             * @returns {boolean} True if this string
+             * @example
+             * AJL.Helper.isString("Yes, it's string");
+             */
             isString: function (param) {
                 return this.classType(param) === "string";
             },
@@ -199,6 +207,12 @@ var AJL = (function (window, document, AJL) {
              * @param val Value which we search
              * @param arr Array where we search
              * @returns {boolean} True if exists and false if not
+             * @example
+             * AJL.Helper.isExistsInArray('My Value', [
+             *      'First Value',
+             *      'My Value',
+             *      'Second Value'
+             * ]);
              */
             isExistsInArray: function (val, arr) {
                 var i;
@@ -217,6 +231,10 @@ var AJL = (function (window, document, AJL) {
              * @param {*} obj Object on which need attach event
              * @param {string} type Type of event
              * @param {function} fn Function of event
+             * @example
+             * AJL.Helper.attachEvent(window, 'load', function() {
+             *      console.log("Page is loaded");
+             * });
              */
             attachEvent: function (obj, type, fn) {
                 if (obj.attachEvent) {
@@ -226,9 +244,6 @@ var AJL = (function (window, document, AJL) {
                     };
                     obj.attachEvent('on' + type, obj[type + fn]);
                 } else {
-                    //FIXME: addEventListener not works now
-                    //But if call fn() manually it's working
-                    //fn();
                     obj.addEventListener(type, fn, false);
                 }
             },
@@ -237,6 +252,10 @@ var AJL = (function (window, document, AJL) {
              * @param {*} obj Object where event assignee
              * @param {string} type Type of event
              * @param {function} fn Function of event
+             * @example
+             * AJL.Helper.detachEvent(window, 'load', function() {
+             *      console.log('Removed');
+             * });
              */
             detachEvent: function (obj, type, fn) {
                 if (obj.removeEventListener) {

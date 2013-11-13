@@ -1,14 +1,14 @@
-/*! AssetsJSLoader - v0.1.0 - 2013-11-12
+/*! AssetsJSLoader - v0.1.0 - 2013-11-13
 * http://ghaiklor.github.io/assetsjsloader/
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
 var AJL = (function (window, document, AJL) {
     //TODO: make autodetect of needed method
     //This need for different params in AJL by one function for use
     /**
-     *
-     * @returns {*}
+     * Make calls of other function in shorthand
+     * @returns {AJL.PackageManager|Boolean}
      * @constructor
-     * @return {boolean}
+     * @namespace AJL
      */
     AJL = function () {
         var packageManager = AJL.PackageManager,
@@ -43,19 +43,19 @@ var AJL = (function (window, document, AJL) {
                     //Then I think that it's namespace setting
                     namespace.setNamespace(argFirst, argSecond);
                 }
-                break;
+                return packageManager;
             default:
-                //If all predefined templates in arguments didn't decided then create packages from them
-                for (item in arguments) {
-                    if (arguments.hasOwnProperty(item)) {
-                        packageName = arguments[item].name;
-                        packageAssets = arguments[item].assets;
-                        packageConfig = arguments[item].config;
-                        packageInstance = new AJL.Package(packageName, packageAssets, packageConfig);
-                        packageManager.setPackage(packageInstance);
-                    }
-                }
                 break;
+        }
+        //If all predefined templates in arguments didn't decided then create packages from them
+        for (item in arguments) {
+            if (arguments.hasOwnProperty(item)) {
+                packageName = arguments[item].name;
+                packageAssets = arguments[item].assets;
+                packageConfig = arguments[item].config;
+                packageInstance = new AJL.Package(packageName, packageAssets, packageConfig);
+                packageManager.setPackage(packageInstance);
+            }
         }
 
         return packageManager;
@@ -77,12 +77,22 @@ var AJL = (function (window, document, AJL) {
             coreHasOwn = Object.prototype.hasOwnProperty,
             class2Type = {};
 
+        /**
+         * @namespace AJL.Helper
+         */
         AJL.Helper = {
             /**
              * Iterate through obj
-             * @param obj Object where need to iterate
-             * @param callback Function which was working while iterate
-             * @returns {*}
+             * @param {Array|Object|Collection} obj Object where need to iterate
+             * @param {Function} callback Function which was working while iterate
+             * @returns {Array|Object|Collection}
+             * @example
+             * AJL.Helper.each({
+             *      foo: 'foo',
+             *      bar: 'bar'
+             * }, function(key, value) {
+             *      console.log(key, value);
+             * });
              */
             each: function (obj, callback) {
                 var i = 0,
@@ -97,84 +107,53 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Extend object
-             * @returns {object|collection} Resulting object
+             * @param {Array|Collection|Object} target Target
+             * @param {Array|Collection|Object} object Object from extending
+             * @returns {Object|Collection} Resulting object
+             * @example
+             * AJL.Helper.extend({
+             *      foo: 'foo'
+             * }, {
+             *      bar: function() {
+             *          console.log("I'm a bar function");
+             *      }
+             * });
              */
-            extend: function () {
-                var options,
-                    name,
-                    src,
-                    copy,
-                    copyIsArray,
-                    clone,
-                    target = arguments[0] || {},
-                    i = 1,
-                    length = arguments.length,
-                    deep = false;
-
-                if (typeof target === "boolean") {
-                    deep = target;
-                    target = arguments[1] || {};
-                    i = 2;
-                }
-
-                if (typeof target !== "object" && !this.isFunction(target)) {
-                    target = {};
-                }
-
-                if (length === i) {
-                    target = this;
-                    --i;
-                }
-
-                for (; i < length; i++) {
-                    if ((options = arguments[i]) != null) {
-                        for (name in options) {
-                            if (options.hasOwnProperty(name)) {
-                                src = target[name];
-                                copy = options[name];
-
-                                if (target === copy) {
-                                    continue;
-                                }
-
-                                if (deep && copy && ( this.isObject(copy) || (copyIsArray = this.isArray(copy)) )) {
-                                    if (copyIsArray) {
-                                        copyIsArray = false;
-                                        clone = src && this.isArray(src) ? src : [];
-                                    } else {
-                                        clone = src && this.isObject(src) ? src : {};
-                                    }
-                                    target[ name ] = this.extend(deep, clone, copy);
-                                } else if (copy !== undefined) {
-                                    target[ name ] = copy;
-                                }
-                            }
-                        }
+            extend: function (target, object) {
+                var item;
+                for (item in object) {
+                    if (object.hasOwnProperty(item)) {
+                        target[item] = object[item];
                     }
                 }
-
                 return target;
             },
             /**
              * Get extension of filename
-             * @param {string} fileName Filename from we need get extension
-             * @returns {string} Extension of file
+             * @param {String} fileName Filename from we need get extension
+             * @returns {String} Extension of file
+             * @example
+             * AJL.Helper.getExtension('SomeFileName.js');
              */
             getExtension: function (fileName) {
                 return fileName.split('.').pop();
             },
             /**
              * Check if this file have js-extensions
-             * @param {string} url URL of file that need to check
-             * @returns {boolean} True if is script file
+             * @param {String} url URL of file that need to check
+             * @returns {Boolean} True if is script file
+             * @example
+             * AJL.Helper.isScriptFile('MyScript.js');
              */
             isScriptFile: function (url) {
                 return scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
              * Check if this file have css-extensions
-             * @param {string} url URL of file that need to check
-             * @returns {boolean} True if is css file
+             * @param {String} url URL of file that need to check
+             * @returns {Boolean} True if is css file
+             * @example
+             * AJL.Helper.isCssFile('SomeStyles.css');
              */
             isCssFile: function (url) {
                 return linkFiles.indexOf(this.getExtension(url)) != -1;
@@ -182,23 +161,29 @@ var AJL = (function (window, document, AJL) {
             /**
              * Check variable for empty
              * @param {*} param Variable that need to check
-             * @returns {boolean} True if empty
+             * @returns {Boolean} True if empty
+             * @example
+             * AJL.Helper.isEmpty([]);
              */
             isEmpty: function (param) {
-                return param == undefined || param == null || param == '' || param.length == 0;
+                return this.isUndefined(param) || param == '' || param.length == 0;
             },
             /**
              * Check variable for undefined or null
              * @param {*} param Variable that need to check
-             * @returns {boolean} True if undefined or null
+             * @returns {Boolean} True if undefined or null
+             * @example
+             * AJL.Helper.isUndefined(undefined);
              */
             isUndefined: function (param) {
                 return param == undefined || param == null;
             },
             /**
              * Get type of obj in string
-             * @param obj Object from which need get type
-             * @returns {string}
+             * @param {*} obj Variable from which need get type
+             * @returns {String} Type of variable
+             * @example
+             * AJL.Helper.classType(['Hi', 'I am array']);
              */
             classType: function (obj) {
                 return obj == null ? String(obj) : class2Type[coreToString.call(obj)] || "object";
@@ -206,7 +191,9 @@ var AJL = (function (window, document, AJL) {
             /**
              * Check if it is object
              * @param obj Object which need check
-             * @returns {boolean}
+             * @returns {boolean} True if this object
+             * @example
+             * AJL.Helper.isObject(['No', 'Not object']);
              */
             isObject: function (obj) {
                 var key;
@@ -222,15 +209,19 @@ var AJL = (function (window, document, AJL) {
                 } catch (Exception) {
                     return false;
                 }
+
                 for (key in obj) {
                 }
+
                 return key === undefined || coreHasOwn.call(obj, key);
             },
             /**
-             * Check if is Object instanceof Of object
-             * @param instance
-             * @param obj
-             * @returns {boolean}
+             * Check if variable instanceof of object
+             * @param {*} instance Instance that need to check
+             * @param {*} obj Object
+             * @returns {boolean} True if Instance instanceof Obj
+             * @example
+             * AJL.Helper.isInstanceOf(myPackage, AJL.Package);
              */
             isInstanceOf: function (instance, obj) {
                 if (this.isUndefined(instance) || this.isUndefined(obj)) {
@@ -239,29 +230,46 @@ var AJL = (function (window, document, AJL) {
                 return (instance instanceof obj);
             },
             /**
-             * Check if obj is function
-             * @param obj What need check
-             * @returns {boolean}
+             * Check if variable is function
+             * @param {*} obj What need check
+             * @returns {boolean} True if this function
+             * @example
+             * AJL.Helper.isFunction(function() {
+             *      console.log("Yes, it's function");
+             * });
              */
             isFunction: function (obj) {
                 return this.classType(obj) === "function";
             },
             /**
-             * Check ib obj is array
+             * Check ib variable is array
              * @param obj What need check
-             * @returns {boolean}
+             * @returns {boolean} True if it's array
+             * @example
+             * AJL.Helper.isArray("No, it's not");
              */
             isArray: function (obj) {
                 return this.classType(obj) === 'array';
             },
             /**
-             * Check if obj is global scoped window object
+             * Check if variable is global scoped window object
              * @param obj What need check
-             * @returns {boolean}
+             * @returns {boolean} True if this window
+             * @example
+             * AJL.Helper.isWindow({
+             *      no: 'not window object'
+             * });
              */
             isWindow: function (obj) {
                 return obj != null && obj == obj.window;
             },
+            /**
+             * Check if variable is string type
+             * @param {*} param What need check
+             * @returns {boolean} True if this string
+             * @example
+             * AJL.Helper.isString("Yes, it's string");
+             */
             isString: function (param) {
                 return this.classType(param) === "string";
             },
@@ -270,6 +278,12 @@ var AJL = (function (window, document, AJL) {
              * @param val Value which we search
              * @param arr Array where we search
              * @returns {boolean} True if exists and false if not
+             * @example
+             * AJL.Helper.isExistsInArray('My Value', [
+             *      'First Value',
+             *      'My Value',
+             *      'Second Value'
+             * ]);
              */
             isExistsInArray: function (val, arr) {
                 var i;
@@ -288,6 +302,10 @@ var AJL = (function (window, document, AJL) {
              * @param {*} obj Object on which need attach event
              * @param {string} type Type of event
              * @param {function} fn Function of event
+             * @example
+             * AJL.Helper.attachEvent(window, 'load', function() {
+             *      console.log("Page is loaded");
+             * });
              */
             attachEvent: function (obj, type, fn) {
                 if (obj.attachEvent) {
@@ -297,9 +315,6 @@ var AJL = (function (window, document, AJL) {
                     };
                     obj.attachEvent('on' + type, obj[type + fn]);
                 } else {
-                    //FIXME: addEventListener not works now
-                    //But if call fn() manually it's working
-                    //fn();
                     obj.addEventListener(type, fn, false);
                 }
             },
@@ -308,6 +323,10 @@ var AJL = (function (window, document, AJL) {
              * @param {*} obj Object where event assignee
              * @param {string} type Type of event
              * @param {function} fn Function of event
+             * @example
+             * AJL.Helper.detachEvent(window, 'load', function() {
+             *      console.log('Removed');
+             * });
              */
             detachEvent: function (obj, type, fn) {
                 if (obj.removeEventListener) {
@@ -331,47 +350,54 @@ var AJL = (function (window, document, AJL) {
         var loadedAssets = [];
 
         AJL.Loader = {
+            /**
+             * Load Package
+             * @this AJL.Package
+             * @returns {boolean}
+             * @example
+             * var myPackage = new AJL.Package('My Package', [
+             *      'foo.js',
+             *      'bar.js'
+             * ], {
+             *      async: false,
+             *      lazy: true
+             * });
+             * AJL.Loader.loadPackage.call(myPackage);
+             */
             loadPackage: function () {
                 var helper = AJL.Helper,
+                    packageManager = AJL.PackageManager,
                     pack = this,
-                    packageName = pack.getName(),
                     packageAssets = pack.getAssets(),
-                    packageConfig = pack.getConfig();
+                    packageConfig = pack.getConfig(),
+                    depend = packageConfig.getItem('depend');
 
                 //If assets array empty then halt loading of package
                 if (helper.isEmpty(packageAssets)) {
                     return false;
                 }
+
+                //If this package depend with other package than load dependencies first
+                if (!helper.isEmpty(depend)) {
+                    packageManager.loadByNames(depend);
+                }
+
                 //If need to wait window.load than call lazyLoad and return
                 if (packageConfig.getItem('lazy') == true) {
-                    lazyLoad.call(this);
-                    return this;
-                }
-                //If this package depend with other package than load dependencies first
-                if (!helper.isEmpty(packageConfig.getItem('dependMap'))) {
-                    loadDependencies(packageConfig);
-                }
-                //In other cases just call initLoader directly for start loading
-                initLoader.call(this);
-                return this;
-
-                //If this asset already loaded then return true
-                if (helper.isExistsInArray(src, loadedAssets)) {
+                    lazyLoad.call(pack);
                     return true;
                 }
 
-                //If we need add script tag
-                if (helper.isScriptFile(src)) {
-                    appendScriptTag();
-                }
-
-                //If we need add link tag
-                if (helper.isCssFile(src)) {
-                    appendLinkTag();
-                }
-
+                //In other cases just call initLoader directly for start loading
+                startLoading.call(pack);
                 return true;
             },
+            /**
+             * Search data-ep in scripts tag and load EntryPoint.js file
+             * @returns {boolean} True if EntryPoint file exists and loaded
+             * @example
+             * AJL.Loader.loadEntryPoint();
+             */
             loadEntryPoint: function () {
                 var scripts = document.getElementsByTagName('script'),
                     entryPointUrl,
@@ -379,96 +405,94 @@ var AJL = (function (window, document, AJL) {
                 for (i = 0; i < scripts.length; i++) {
                     entryPointUrl = scripts[i].getAttribute('data-ep');
                     if (entryPointUrl) {
-                        appendScriptTag(entryPointUrl);
+                        appendScriptTag(entryPointUrl, true);
                         return true;
                     }
                 }
                 return false;
             }
         };
+
         function appendToHead(element) {
             var head = document.getElementsByTagName('head')[0];
             head.appendChild(element);
             return true;
         }
 
-        function appendScriptTag(src) {
-            var tag = document.createElement('script');
-            tag.type = 'text/javascript';
-            tag.async = true;
+        function appendScriptTag(src, async, type) {
+            var helper = AJL.Helper,
+                tag = document.createElement('script');
+            tag.type = helper.isUndefined(type) ? 'text/javascript' : type;
+            tag.async = helper.isUndefined(async) ? true : async;
             tag.src = src;
             appendToHead(tag);
-            loadedAssets.push(src);
             return true;
         }
 
-        function appendLinkTag(src) {
-            if (AJL.Helper.isExistsInArray(src, loadedAssets)) {
-                return;
-            }
-            var tag = document.createElement('link'),
-                config = this;
-            tag.rel = AJL.Helper.isUndefined(config.getItem) ? 'stylesheet' : config.getItem('linkCssRelAttr');
-            tag.type = AJL.Helper.isUndefined(config.getItem) ? 'text/css' : config.getItem('linkCssTypeAttr');
+        function appendLinkTag(src, rel, type) {
+            var helper = AJL.Helper,
+                tag = document.createElement('link');
+            tag.rel = helper.isUndefined(rel) ? 'stylesheet' : rel;
+            tag.type = helper.isUndefined(type) ? 'text/css' : type;
             tag.href = src;
             appendToHead(tag);
-            loadedAssets.push(src);
             return true;
+        }
+
+        function startLoading() {
+            var helper = AJL.Helper,
+                pack = this,
+                assets = pack.getAssets(),
+                config = pack.getConfig(),
+                currentUrl = '',
+                assetsLength = assets.length,
+                i;
+            for (i = 0; i < assetsLength; i++) {
+                currentUrl = assets[i];
+
+                if (helper.isExistsInArray(currentUrl, loadedAssets)) {
+                    continue;
+                }
+
+                loadedAssets.push(currentUrl);
+                if (helper.isScriptFile(currentUrl)) {
+                    appendScriptTag(currentUrl, config.getItem('async'), config.getItem('scriptTypeAttr'));
+                    continue;
+                }
+                if (helper.isCssFile(currentUrl)) {
+                    appendLinkTag(currentUrl, config.getItem('linkCssRelAttr'), config.getItem('linkCssTypeAttr'));
+                }
+            }
         }
 
         function lazyLoad() {
             var helper = AJL.Helper,
                 pack = this;
             helper.attachEvent(window, 'load', function () {
-                initLoader.call(pack);
+                startLoading.call(pack);
             });
-        }
-
-        function initLoader() {
-            var pack = this,
-                assets = pack.assets,
-                config = pack.config,
-                currentUrl = '';
-            for (var url in assets) {
-                if (assets.hasOwnProperty(url)) {
-                    currentUrl = assets[url];
-                    if (AJL.Helper.isScriptFile(currentUrl)) {
-                        //We need use call 'cause Loader must execute in context of current package's config
-                        AJL.Loader.appendScriptTag.call(config, currentUrl);
-                        continue;
-                    }
-                    if (AJL.Helper.isCssFile(currentUrl)) {
-                        //We need use call 'cause Loader must execute in context of current package's config
-                        AJL.Loader.appendLinkTag.call(config, currentUrl);
-                    }
-                }
-            }
-        }
-
-        /**
-         * Load dependencies of current package
-         * @this {AJL.PackageConfig}
-         */
-        function loadDependencies() {
-            var loader = AJL.Loader,
-                config = this,
-                dependArray = config.getItem('dependMap'),
-                curDependAsset,
-                i;
-
-            for (i in dependArray) {
-                if (dependArray.hasOwnProperty(i)) {
-                    curDependAsset = dependArray[i];
-                    loader.appendDependAsset(curDependAsset);
-                }
-            }
         }
     }
     return AJL;
 })(window, document, window.AJL || {});
 var AJL = (function (window, document, AJL) {
     if (!AJL.Namespace) {
+        /**
+         * @namespace AJL.Namespace
+         */
         AJL.Namespace = {
+            /**
+             * Set namespace for module
+             * @param {String} namespace Namespace of module divided by "."
+             * @param {*} module Your module which you want load to namespace
+             * @returns {*} Returns modified window to global scope with your module
+             * @example
+             * AJL.Namespace.setNamespace('MyScope.MyModule.SubModule.MyClass', function MyClass(foo, bar) {
+             *      this.foo = foo;
+             *      this.bar = bar;
+             *      return this;
+             * });
+             */
             setNamespace: function (namespace, module) {
                 var parts = namespace.split('.'),
                     parent = window,
@@ -490,6 +514,13 @@ var AJL = (function (window, document, AJL) {
                 //And not forgot return generated namespace to global scope
                 return parent;
             },
+            /**
+             * Check if this namespace already exists
+             * @param {String} namespace Namespace divided by "." what need to check
+             * @returns {boolean} True if exists and false if not
+             * @example
+             * AJL.Namespace.isNamespaceExists('MyScope.MyModule.SubModule.MyClass');
+             */
             isNamespaceExists: function (namespace) {
                 var parts = namespace.split('.'),
                     parent = window,
@@ -506,6 +537,15 @@ var AJL = (function (window, document, AJL) {
                 }
                 return true;
             },
+            /**
+             * Wait for loading namespace into global scope
+             * @param {String} namespace Which namespace we need to wait
+             * @param {Function} callback Function which call when namespace is loaded
+             * @example
+             * AJL.Namespace.waitNamespaceForAvailable('MyScope.MyModule.SubModule.MyClass', function() {
+             *      console.log("Yes, I just loaded now");
+             * });
+             */
             waitNamespaceForAvailable: function (namespace, callback) {
                 var interval = 100;
                 window.setTimeout(function () {
@@ -523,32 +563,110 @@ var AJL = (function (window, document, AJL) {
 })(window, document, window.AJL || {});
 var AJL = (function (window, document, AJL) {
     if (!AJL.Package) {
+        /**
+         * Create Package
+         * @param {String} name Name of package
+         * @param {Array} assets Array of assets that need load
+         * @param {Object} params Configuration object for this package
+         * @returns {AJL.Package}
+         * @constructor
+         * @class {AJL.Package}
+         * @example
+         * new AJL.Package('My Own Package', [
+         *          'foo.js',
+         *          'bar.js',
+         *          'style.css'
+         *      ], {
+         *          async: false,
+         *          lazy: true
+         *      });
+         */
         AJL.Package = function (name, assets, params) {
+            /**
+             * Name of package
+             * @type {String}
+             */
             this.name = name;
+            /**
+             * Assets of this package
+             * @type {Array}
+             */
             this.assets = assets;
+            /**
+             * Configuration object of this package
+             * @type {AJL.PackageConfig}
+             */
             this.config = new AJL.PackageConfig(params);
             return this;
         };
 
         AJL.Package.prototype = {
+            /**
+             * Get name of package
+             * @returns {String}
+             * @example
+             * myPackage.getName();
+             */
             getName: function () {
                 return this.name;
             },
+            /**
+             * Set new name for package
+             * @param {String} name New name of package
+             * @example
+             * myPackage.setName('New name');
+             */
             setName: function (name) {
                 this.name = name;
             },
+            /**
+             * Get assets from package
+             * @returns {Array}
+             * @example
+             * myPackage.getAssets();
+             */
             getAssets: function () {
                 return this.assets;
             },
+            /**
+             * Set new assets for package
+             * @param {Array} assets New array of assets for package
+             * @example
+             * myPackage.setAssets([
+             *          'new.js',
+             *          'new2.js'
+             *      ]);
+             */
             setAssets: function (assets) {
                 this.assets = assets;
             },
+            /**
+             * Get config object from package
+             * @returns {AJL.PackageConfig}
+             * @example
+             * myPackage.getConfig();
+             */
             getConfig: function () {
                 return this.config;
             },
+            /**
+             * Set new config object for package
+             * @param {AJL.PackageConfig} config New object of configuration
+             * @example
+             * myPackage.setConfig(
+             *      new AJL.PackageConfig({
+             *          lazy: true,
+             *          depend: ['mySecondPackageName']
+             *      }));
+             */
             setConfig: function (config) {
                 this.config = config;
             },
+            /**
+             * Start loading of package
+             * @example
+             * myPackage.load();
+             */
             load: function () {
                 AJL.Loader.loadPackage.call(this);
             }
@@ -558,29 +676,50 @@ var AJL = (function (window, document, AJL) {
 })(window, document, window.AJL || {});
 var AJL = (function (window, document, AJL) {
     if (!AJL.PackageConfig) {
+        /**
+         * Create configuration object for Package
+         * @param {Object} params Object with configuration
+         * @param {Boolean} params.async Asynchronous loading of package or not
+         * @param {Boolean} params.lazy Lazy loading of package (waiting for window loads)
+         * @param {Array} params.depend Array of Package's names which need to load before load this
+         * @param {String} params.scriptTypeAttr This value write in script tag in type attribute
+         * @param {String} params.linkCssTypeAttr This value write in link tag in type attribute
+         * @param {String} params.linkCssRelAttr This value write in link tag in rel attribute
+         * @returns {AJL.PackageConfig}
+         * @constructor
+         * @class {AJL.PackageConfig}
+         * @example
+         * new AJL.PackageConfig({
+         *      async: false,
+         *      lazy: true,
+         *      depend: ['Package One Name', 'Package Two Name']
+         * });
+         */
         AJL.PackageConfig = function (params) {
             var helper = AJL.Helper,
-                dependArray,
                 options = {
                     async: true,
                     lazy: false,
                     depend: [],
-                    dependMap: [],
                     scriptTypeAttr: 'text/javascript',
                     linkCssTypeAttr: 'text/css',
                     linkCssRelAttr: 'stylesheet'
                 };
-
+            /**
+             * Configuration object with params
+             * @type {Object}
+             */
             this.options = helper.extend(options, params);
-            //If dependencies not empty then build depend-map
-            dependArray = this.getItem('depend');
-            if (!helper.isEmpty(dependArray)) {
-                this.setItem('dependMap', buildDependMap(dependArray));
-            }
-
             return this;
         };
         AJL.PackageConfig.prototype = {
+            /**
+             * Get item from configuration storage of Package
+             * @param {String} key Name of value in storage
+             * @returns {*}
+             * @example
+             * myConfig.getItem('dependMap');
+             */
             getItem: function (key) {
                 var options = this.options;
                 if (options.hasOwnProperty(key)) {
@@ -589,40 +728,20 @@ var AJL = (function (window, document, AJL) {
                     return null;
                 }
             },
+            /**
+             * Set item in configuration storage of Package
+             * @param {String} key Name of value in storage
+             * @param {*} value Value of this param
+             * @returns {AJL.PackageConfig}
+             * @example
+             * myConfig.setItem('MyOwnParam', 'Foo');
+             */
             setItem: function (key, value) {
                 var options = this.options;
                 options[key] = value;
                 return this;
             }
         };
-
-        function buildDependMap(packagesNameArray) {
-            var resultDependMap = [],
-                curPack,
-                curAsset,
-                indexPackage,
-                indexAssets;
-
-            //Loop through all packageNames
-            for (indexPackage in packagesNameArray) {
-                if (packagesNameArray.hasOwnProperty(indexPackage)) {
-                    //Get Package Object for current packageName
-                    curPack = AJL.PackageManager.getPackage(packagesNameArray[indexPackage]);
-                    for (indexAssets = 0; indexAssets < curPack.assets.length; indexAssets++) {
-                        //Loop through all assets in currently selected package
-                        curAsset = curPack.assets[indexAssets];
-                        //If this asset already exists in dependency map then don't add it into map
-                        if (AJL.Helper.isExistsInArray(curAsset, resultDependMap)) {
-                            continue;
-                        }
-                        //In other case add this asset into resulting map array
-                        resultDependMap.push(curPack.assets[indexAssets]);
-                    }
-                }
-            }
-            //And finally set generated dependency map to config of current package
-            return resultDependMap;
-        }
     }
     return AJL;
 })(window, document, window.AJL || {});
@@ -630,11 +749,16 @@ var AJL = (function (window, document, AJL) {
     if (!AJL.PackageManager) {
         var packages = [];
 
+        /**
+         * @namespace AJL.PackageManager
+         */
         AJL.PackageManager = {
             /**
              * Get package from AJL
-             * @param {string} name Name of package
-             * @returns {boolean|Package} Package if successful and false if not
+             * @param {String} name Name of package
+             * @returns {Boolean|AJL.Package} Package if successful and false if not
+             * @example
+             * AJL.PackageManager.getPackage('My Package Name');
              */
             getPackage: function (name) {
                 var helper = AJL.Helper;
@@ -646,16 +770,21 @@ var AJL = (function (window, document, AJL) {
                 return false;
             },
             /**
-             *
-             * @param names
+             * Get packages from AJL
+             * @param {Array} names Array of Package's names which need get
              * @returns {Array}
+             * @example
+             * AJL.PackageManager.getPackages([
+             *          'First Package Name',
+             *          'Second Package Name'
+             *      ]);
              */
             getPackages: function (names) {
                 var self = this,
                     packageArray = [],
-                    namesLength = names.length,
                     curName,
                     curPackage,
+                    namesLength = names.length,
                     i;
 
                 for (i = 0; i < namesLength; i++) {
@@ -671,35 +800,56 @@ var AJL = (function (window, document, AJL) {
             /**
              * Add package to PackageManager or rewrite exists
              * @param {AJL.Package} pack Package what need to add
-             * @returns {boolean|AJL.PackageManager} True if successful
+             * @returns {boolean|AJL.PackageManager} False if not successful and PackageManager if successful
+             * @example
+             * AJL.PackageManager.setPackage(
+             *      new AJL.Package('New Package', [
+             *              'foo.js',
+             *              'bar.js',
+             *              'style.css',
+             *          ], {
+             *              async: false,
+             *              lazy: true,
+             *              depend: ['Some other Package Name']
+             *          })
+             *      );
              */
             setPackage: function (pack) {
                 var helper = AJL.Helper,
                     packName;
 
-                packName = pack.getName();
-                if (!helper.isEmpty(packName) && helper.isInstanceOf(pack, AJL.Package)) {
-                    packages[packName] = pack;
-
-                    return this;
+                if (helper.isInstanceOf(pack, AJL.Package)) {
+                    packName = pack.getName();
+                    if (!helper.isEmpty(packName)) {
+                        packages[packName] = pack;
+                        return this;
+                    }
                 }
 
                 return false;
             },
             /**
-             * Set packages to PackageManager
-             * @param packs
+             * Add Packages to PackageManager or rewrite exists
+             * @param {Array} packs Array of AJL.Package objects
              * @returns {AJL.PackageManager}
+             * @example
+             * var FooPackage = new AJL.Package('Foo', ['foo.js', 'foo2.js']);
+             * var BarPackage = new AJL.Package('Bar', ['bar.js', 'bar2.js'], {
+             *      async: false,
+             *      depend: ['Foo']
+             * });
+             * AJL.PackageManager.setPackages([FooPackage, BarPackage]);
              */
             setPackages: function (packs) {
                 var self = this,
                     helper = AJL.Helper,
                     curPack,
-                    item;
+                    packsLength = packs.length,
+                    i;
 
-                for (item in packs) {
-                    if (packs.hasOwnProperty(item) && helper.isInstanceOf(packs[item], AJL.Package)) {
-                        curPack = packs[item];
+                for (i = 0; i < packsLength; i++) {
+                    curPack = packs[i];
+                    if (helper.isInstanceOf(curPack, AJL.Package)) {
                         self.setPackage(curPack);
                     }
                 }
@@ -708,13 +858,19 @@ var AJL = (function (window, document, AJL) {
             /**
              * Load all packages in AJL
              * @return {AJL.PackageManager}
+             * @example
+             * AJL.PackageManager.loadAll();
              */
             loadAll: function () {
-                var helper = AJL.Helper;
+                var helper = AJL.Helper,
+                    curPack;
 
                 for (var pack in packages) {
-                    if (packages.hasOwnProperty(pack) && helper.isInstanceOf(packages[pack], AJL.Package)) {
-                        packages[pack].load();
+                    if (packages.hasOwnProperty(pack)) {
+                        curPack = packages[pack];
+                        if (helper.isInstanceOf(curPack, AJL.Package)) {
+                            curPack.load();
+                        }
                     }
                 }
                 return this;
@@ -722,7 +878,9 @@ var AJL = (function (window, document, AJL) {
             /**
              * Load one package by name
              * @param {string} name Name of package to load
-             * @return {boolean|AJL.PackageManager} True if loaded
+             * @return {boolean|AJL.PackageManager} PackageManager if loaded and false if not
+             * @example
+             * AJL.PackageManager.loadByName('Own Package Name');
              */
             loadByName: function (name) {
                 var helper = AJL.Helper;
@@ -734,18 +892,26 @@ var AJL = (function (window, document, AJL) {
                 return false;
             },
             /**
-             * Load packages by their names
-             * @param names
+             * Load packages by names
+             * @param {Array} names Array of Package's names to load
+             * @returns {AJL.PackageManager}
+             * @example
+             * AJL.PackageManager.loadByNames([
+             *      'First Package Name',
+             *      'Second Package Name'
+             * ]);
              */
             loadByNames: function (names) {
                 var helper = AJL.Helper,
-                    i,
-                    namesLength;
+                    curName,
+                    namesLength,
+                    i;
 
                 namesLength = names.length;
                 for (i = 0; i < namesLength; i++) {
-                    if (packages.hasOwnProperty(names[i]) && helper.isInstanceOf(packages[names[i]], AJL.Package)) {
-                        packages[names[i]].load();
+                    curName = names[i];
+                    if (packages.hasOwnProperty(curName) && helper.isInstanceOf(packages[curName], AJL.Package)) {
+                        packages[curName].load();
                     }
                 }
                 return this;

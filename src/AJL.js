@@ -2,10 +2,10 @@ var AJL = (function (window, document, AJL) {
     //TODO: make autodetect of needed method
     //This need for different params in AJL by one function for use
     /**
-     *
-     * @returns {*}
+     * Make calls of other function in shorthand
+     * @returns {AJL.PackageManager|Boolean}
      * @constructor
-     * @return {boolean}
+     * @namespace AJL
      */
     AJL = function () {
         var packageManager = AJL.PackageManager,
@@ -40,19 +40,19 @@ var AJL = (function (window, document, AJL) {
                     //Then I think that it's namespace setting
                     namespace.setNamespace(argFirst, argSecond);
                 }
-                break;
+                return packageManager;
             default:
-                //If all predefined templates in arguments didn't decided then create packages from them
-                for (item in arguments) {
-                    if (arguments.hasOwnProperty(item)) {
-                        packageName = arguments[item].name;
-                        packageAssets = arguments[item].assets;
-                        packageConfig = arguments[item].config;
-                        packageInstance = new AJL.Package(packageName, packageAssets, packageConfig);
-                        packageManager.setPackage(packageInstance);
-                    }
-                }
                 break;
+        }
+        //If all predefined templates in arguments didn't decided then create packages from them
+        for (item in arguments) {
+            if (arguments.hasOwnProperty(item)) {
+                packageName = arguments[item].name;
+                packageAssets = arguments[item].assets;
+                packageConfig = arguments[item].config;
+                packageInstance = new AJL.Package(packageName, packageAssets, packageConfig);
+                packageManager.setPackage(packageInstance);
+            }
         }
 
         return packageManager;

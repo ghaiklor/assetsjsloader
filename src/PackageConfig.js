@@ -1,28 +1,49 @@
 var AJL = (function (window, document, AJL) {
     if (!AJL.PackageConfig) {
+        /**
+         * Create configuration object for Package
+         * @param {Object} params Object with configuration
+         * @param {Boolean} params.async Asynchronous loading of package or not
+         * @param {Boolean} params.lazy Lazy loading of package (waiting for window loads)
+         * @param {Array} params.depend Array of Package's names which need to load before load this
+         * @param {String} params.scriptTypeAttr This value write in script tag in type attribute
+         * @param {String} params.linkCssTypeAttr This value write in link tag in type attribute
+         * @param {String} params.linkCssRelAttr This value write in link tag in rel attribute
+         * @returns {AJL.PackageConfig}
+         * @constructor
+         * @class {AJL.PackageConfig}
+         * @example
+         * new AJL.PackageConfig({
+         *      async: false,
+         *      lazy: true,
+         *      depend: ['Package One Name', 'Package Two Name']
+         * });
+         */
         AJL.PackageConfig = function (params) {
             var helper = AJL.Helper,
-                dependArray,
                 options = {
                     async: true,
                     lazy: false,
                     depend: [],
-                    dependMap: [],
                     scriptTypeAttr: 'text/javascript',
                     linkCssTypeAttr: 'text/css',
                     linkCssRelAttr: 'stylesheet'
                 };
-
+            /**
+             * Configuration object with params
+             * @type {Object}
+             */
             this.options = helper.extend(options, params);
-            //If dependencies not empty then build depend-map
-            dependArray = this.getItem('depend');
-            if (!helper.isEmpty(dependArray)) {
-                this.setItem('dependMap', buildDependMap(dependArray));
-            }
-
             return this;
         };
         AJL.PackageConfig.prototype = {
+            /**
+             * Get item from configuration storage of Package
+             * @param {String} key Name of value in storage
+             * @returns {*}
+             * @example
+             * myConfig.getItem('dependMap');
+             */
             getItem: function (key) {
                 var options = this.options;
                 if (options.hasOwnProperty(key)) {
@@ -31,40 +52,20 @@ var AJL = (function (window, document, AJL) {
                     return null;
                 }
             },
+            /**
+             * Set item in configuration storage of Package
+             * @param {String} key Name of value in storage
+             * @param {*} value Value of this param
+             * @returns {AJL.PackageConfig}
+             * @example
+             * myConfig.setItem('MyOwnParam', 'Foo');
+             */
             setItem: function (key, value) {
                 var options = this.options;
                 options[key] = value;
                 return this;
             }
         };
-
-        function buildDependMap(packagesNameArray) {
-            var resultDependMap = [],
-                curPack,
-                curAsset,
-                indexPackage,
-                indexAssets;
-
-            //Loop through all packageNames
-            for (indexPackage in packagesNameArray) {
-                if (packagesNameArray.hasOwnProperty(indexPackage)) {
-                    //Get Package Object for current packageName
-                    curPack = AJL.PackageManager.getPackage(packagesNameArray[indexPackage]);
-                    for (indexAssets = 0; indexAssets < curPack.assets.length; indexAssets++) {
-                        //Loop through all assets in currently selected package
-                        curAsset = curPack.assets[indexAssets];
-                        //If this asset already exists in dependency map then don't add it into map
-                        if (AJL.Helper.isExistsInArray(curAsset, resultDependMap)) {
-                            continue;
-                        }
-                        //In other case add this asset into resulting map array
-                        resultDependMap.push(curPack.assets[indexAssets]);
-                    }
-                }
-            }
-            //And finally set generated dependency map to config of current package
-            return resultDependMap;
-        }
     }
     return AJL;
 })(window, document, window.AJL || {});
