@@ -3,10 +3,49 @@
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
 var AJL = (function (window, document, AJL) {
     /**
-     * Make calls of other function in shorthand
+     * Make calls of others functions in shorthand syntax
      * @returns {AJL.PackageManager|Boolean}
      * @constructor
      * @namespace AJL
+     * @author Eugene Obrezkov
+     * @copyright 2013 MIT License
+     * @example
+     * //Create Packages with one call
+     * AJL({
+     *      name: "My Package",
+     *      assets: ['vendor/foo.js', 'vendor/bar.js']
+     * }, {
+     *      name: "Backbone",
+     *      assets: ['vendor/underscore.js', 'vendor/backbone.js']
+     * });
+     * //And this will create Packages which will be available through Package Manager
+     *
+     * //Get PackageManager for loading of some Packages
+     * var PackageManager = AJL();
+     * PackageManager.loadByName("My Package");
+     * //Or using chainloading
+     * AJL().loadByName("My Package");
+     *
+     * //Get Package from AJL
+     * var myPackage = AJL("My Package");
+     * //And then using it
+     * myPackage.load();
+     * //Or using chainloading again
+     * AJL("My Package").load();
+     *
+     * //Set own namespaces
+     * AJL("MyScope.MyModule.MySubmodule", {
+     *      foo: 'foo',
+     *      bar: function() {
+     *          console.log("Bar");
+     *      }
+     * });
+     * AJL("MyScope.MyModule.MyFunction", function() {
+     *      console.log("Some function or constructor");
+     * });
+     * //And then using it like this
+     * MyScope.MyModule.MySubmodule.bar();
+     * MyScope.MyModule.MyFunction();
      */
     AJL = function () {
         var packageManager = AJL.PackageManager,
@@ -21,6 +60,7 @@ var AJL = (function (window, document, AJL) {
             argSecond,
             i;
 
+        //Switch of arguments length for detect what need to do
         switch (argLength) {
             case 0:
                 //If arguments not exists then just return PackageManager instance
@@ -80,9 +120,9 @@ var AJL = (function (window, document, AJL) {
          */
         AJL.Helper = {
             /**
-             * Iterate through obj
+             * Iterate through object
              * @param {Array|Object|Collection} obj Object where need to iterate
-             * @param {Function} callback Function which was working while iterate
+             * @param {Function} callback Function which will working while iterate
              * @returns {Array|Object|Collection}
              * @example
              * AJL.Helper.each({
@@ -97,6 +137,8 @@ var AJL = (function (window, document, AJL) {
                     objLength = obj.length;
 
                 for (; i < objLength;) {
+                    //For each element in obj call callback function
+                    //with call and change this context with current item
                     if (callback.call(obj[i], i, obj[i++]) === false) {
                         break;
                     }
@@ -106,7 +148,7 @@ var AJL = (function (window, document, AJL) {
             /**
              * Extend object
              * @param {Array|Collection|Object} target Target
-             * @param {Array|Collection|Object} object Object from extending
+             * @param {Array|Collection|Object} object From which object extend target
              * @returns {Object|Collection} Resulting object
              * @example
              * AJL.Helper.extend({
@@ -128,7 +170,7 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Get extension of filename
-             * @param {String} fileName Filename from we need get extension
+             * @param {String} fileName Filename from which we need get extension
              * @returns {String} Extension of file
              * @example
              * AJL.Helper.getExtension('SomeFileName.js');
@@ -137,7 +179,7 @@ var AJL = (function (window, document, AJL) {
                 return fileName.split('.').pop();
             },
             /**
-             * Check if this file have js-extensions
+             * Check if this file has js-extensions
              * @param {String} url URL of file that need to check
              * @returns {Boolean} True if is script file
              * @example
@@ -147,7 +189,7 @@ var AJL = (function (window, document, AJL) {
                 return scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
-             * Check if this file have css-extensions
+             * Check if this file has css-extensions
              * @param {String} url URL of file that need to check
              * @returns {Boolean} True if is css file
              * @example
@@ -157,8 +199,8 @@ var AJL = (function (window, document, AJL) {
                 return linkFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
-             * Check variable for empty
-             * @param {*} param Variable that need to check
+             * Is variable empty or not
+             * @param {*} param Variable which need check
              * @returns {Boolean} True if empty
              * @example
              * AJL.Helper.isEmpty([]);
@@ -167,8 +209,8 @@ var AJL = (function (window, document, AJL) {
                 return this.isUndefined(param) || param == '' || param.length == 0;
             },
             /**
-             * Check variable for undefined or null
-             * @param {*} param Variable that need to check
+             * Is variable undefined
+             * @param {*} param Variable which need check
              * @returns {Boolean} True if undefined or null
              * @example
              * AJL.Helper.isUndefined(undefined);
@@ -216,7 +258,7 @@ var AJL = (function (window, document, AJL) {
             /**
              * Check if variable instanceof of object
              * @param {*} instance Instance that need to check
-             * @param {*} obj Object
+             * @param {*} obj Object or Function
              * @returns {boolean} True if Instance instanceof Obj
              * @example
              * AJL.Helper.isInstanceOf(myPackage, AJL.Package);
@@ -228,7 +270,7 @@ var AJL = (function (window, document, AJL) {
                 return (instance instanceof obj);
             },
             /**
-             * Check if variable is function
+             * Check if it is function
              * @param {*} obj What need check
              * @returns {boolean} True if this function
              * @example
@@ -240,7 +282,7 @@ var AJL = (function (window, document, AJL) {
                 return this.classType(obj) === "function";
             },
             /**
-             * Check ib variable is array
+             * Check if variable it is array
              * @param obj What need check
              * @returns {boolean} True if it's array
              * @example
@@ -250,7 +292,7 @@ var AJL = (function (window, document, AJL) {
                 return this.classType(obj) === 'array';
             },
             /**
-             * Check if variable is global scoped window object
+             * Check if variable it is global scope - window object
              * @param obj What need check
              * @returns {boolean} True if this window
              * @example
@@ -262,7 +304,7 @@ var AJL = (function (window, document, AJL) {
                 return obj != null && obj == obj.window;
             },
             /**
-             * Check if variable is string type
+             * Check if variable it is string type
              * @param {*} param What need check
              * @returns {boolean} True if this string
              * @example
@@ -272,7 +314,7 @@ var AJL = (function (window, document, AJL) {
                 return this.classType(param) === "string";
             },
             /**
-             * Check if val exists in array
+             * Check if value exists in array
              * @param val Value which we search
              * @param arr Array where we search
              * @returns {boolean} True if exists and false if not
@@ -307,6 +349,7 @@ var AJL = (function (window, document, AJL) {
              */
             attachEvent: function (obj, type, fn) {
                 if (obj.attachEvent) {
+                    //Fallback for IE and old browsers
                     obj['e' + type + fn] = fn;
                     obj[type + fn] = function () {
                         obj['e' + type + fn](window.event);
@@ -318,7 +361,7 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Detach event from object
-             * @param {*} obj Object where event assignee
+             * @param {*} obj Object where event assigned
              * @param {string} type Type of event
              * @param {function} fn Function of event
              * @example
@@ -330,6 +373,7 @@ var AJL = (function (window, document, AJL) {
                 if (obj.removeEventListener) {
                     obj.removeEventListener(type, fn, false);
                 } else {
+                    //Fallback for IE and older browsers
                     obj.detachEvent('on' + type, obj[type + fn]);
                     obj[type + fn] = null;
                     obj['e' + type + fn] = null;
@@ -347,9 +391,12 @@ var AJL = (function (window, document, AJL) {
     if (!AJL.Loader) {
         var loadedAssets = [];
 
+        /**
+         * @namespace AJL.Loader
+         */
         AJL.Loader = {
             /**
-             * Load Package
+             * Function for proceed loading of Package
              * @this AJL.Package
              * @returns {boolean}
              * @example
@@ -386,7 +433,7 @@ var AJL = (function (window, document, AJL) {
                     return true;
                 }
 
-                //In other cases just call initLoader directly for start loading
+                //In other cases just call startLoading directly for start loading
                 startLoading.call(pack);
                 return true;
             },
@@ -445,19 +492,24 @@ var AJL = (function (window, document, AJL) {
                 currentUrl = '',
                 assetsLength = assets.length,
                 i;
+            //Iterate through all assets array
             for (i = 0; i < assetsLength; i++) {
                 currentUrl = assets[i];
 
+                //If current asset url is loaded already then continue to next one
                 if (helper.isExistsInArray(currentUrl, loadedAssets)) {
                     continue;
                 }
 
+                //If current asset not loaded then push to loadedAssets array for remember it
                 loadedAssets.push(currentUrl);
                 if (helper.isScriptFile(currentUrl)) {
+                    //Append script tag
                     appendScriptTag(currentUrl, config.getItem('async'), config.getItem('scriptTypeAttr'));
                     continue;
                 }
                 if (helper.isCssFile(currentUrl)) {
+                    //Append link tag
                     appendLinkTag(currentUrl, config.getItem('linkCssRelAttr'), config.getItem('linkCssTypeAttr'));
                 }
             }
@@ -501,10 +553,13 @@ var AJL = (function (window, document, AJL) {
                 //Need iterate all parts of namespace without last one
                 partsLength = parts.length - 1;
                 for (i = 0; i < partsLength; i++) {
+                    //Remember current part
                     curPart = parts[i];
                     if (typeof parent[curPart] === 'undefined') {
+                        //If this part undefined then create empty
                         parent[curPart] = {};
                     }
+                    //Remember created part in parent
                     parent = parent[curPart];
                 }
                 //And last one of parts need to be filled by module param
@@ -529,6 +584,7 @@ var AJL = (function (window, document, AJL) {
                 for (i = 0; i < partsLength; i++) {
                     curPart = parts[i];
                     if (typeof parent[curPart] === "undefined") {
+                        //If all cycle we see something undefined then namespace not exists
                         return false;
                     }
                     parent = parent[curPart];
@@ -566,6 +622,12 @@ var AJL = (function (window, document, AJL) {
          * @param {String} name Name of package
          * @param {Array} assets Array of assets that need load
          * @param {Object} params Configuration object for this package
+         * @param {Boolean} params.async Asynchronous loading of package or not
+         * @param {Boolean} params.lazy Lazy loading of package (waiting for window loads)
+         * @param {Array} params.depend Array of Package's names which need to load before load this
+         * @param {String} params.scriptTypeAttr This value write in script tag in type attribute
+         * @param {String} params.linkCssTypeAttr This value write in link tag in type attribute
+         * @param {String} params.linkCssRelAttr This value write in link tag in rel attribute
          * @returns {AJL.Package}
          * @constructor
          * @class {AJL.Package}
@@ -601,7 +663,7 @@ var AJL = (function (window, document, AJL) {
         AJL.Package.prototype = {
             /**
              * Get name of package
-             * @returns {String}
+             * @returns {String} Name of Package
              * @example
              * myPackage.getName();
              */
@@ -619,7 +681,7 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Get assets from package
-             * @returns {Array}
+             * @returns {Array} Array of asset's URL
              * @example
              * myPackage.getAssets();
              */
@@ -628,7 +690,7 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Set new assets for package
-             * @param {Array} assets New array of assets for package
+             * @param {Array} assets New array of asset's URL for package
              * @example
              * myPackage.setAssets([
              *          'new.js',

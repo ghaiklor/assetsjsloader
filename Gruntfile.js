@@ -25,7 +25,11 @@ module.exports = function (grunt) {
         },
         uglify: {
             options: {
-                banner: '<%= banner %>'
+                banner: '<%= banner %>',
+                beautify: false,
+                //report: 'gzip'
+                preserveComments: false,
+                mangle: true
             },
             dist: {
                 src: '<%= concat.dist.dest %>',
