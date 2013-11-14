@@ -6,34 +6,6 @@
 <body>
 <a href="../index.html">Back</a>
 
-<script src="../dist/AJL.min.js"></script>
-<script>
-    new AJL.Package('Test One', [
-        'vendor/angular.js',
-        'vendor/jquery.ui.accordion.css',
-        'vendor/jquery-2.0.3.js',
-        'vendor/snap.svg.js'
-    ], {
-        lazy: true
-    });
-
-    new AJL.Package('Test Two', [
-        'vendor/underscore.js',
-        'vendor/prism.js'
-    ], {
-        async: false,
-        linkCssRelAttr: 'some_other_attr_for_link',
-        scriptTypeAttr: 'some_other_attr_for_script'
-    });
-
-    new AJL.Package('Test Three', [
-        'vendor/underscore.js'
-    ], {
-        lazy: false,
-        async: true
-    });
-
-    AJL.PackageManager.loadAll();
-</script>
+<script src="../dist/AJL.concat.js" data-ep="EntryPoint.js"></script>
 </body>
 </html>

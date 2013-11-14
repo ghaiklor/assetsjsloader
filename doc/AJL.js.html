@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AJL.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: AJL.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>var AJL = (function (window, document, AJL) {
+    /**
+     * Make calls of others functions in shorthand syntax
+     * @returns {AJL.PackageManager|Boolean}
+     * @constructor
+     * @namespace AJL
+     * @author Eugene Obrezkov
+     * @copyright 2013 MIT License
+     * @example
+     * //Create Packages with one call
+     * AJL({
+     *      name: "My Package",
+     *      assets: ['vendor/foo.js', 'vendor/bar.js']
+     * }, {
+     *      name: "Backbone",
+     *      assets: ['vendor/underscore.js', 'vendor/backbone.js']
+     * });
+     * //And this will create Packages which will be available through Package Manager
+     *
+     * //Get PackageManager for loading of some Packages
+     * var PackageManager = AJL();
+     * PackageManager.loadByName("My Package");
+     * //Or using chainloading
+     * AJL().loadByName("My Package");
+     *
+     * //Get Package from AJL
+     * var myPackage = AJL("My Package");
+     * //And then using it
+     * myPackage.load();
+     * //Or using chainloading again
+     * AJL("My Package").load();
+     *
+     * //Set own namespaces
+     * AJL("MyScope.MyModule.MySubmodule", {
+     *      foo: 'foo',
+     *      bar: function() {
+     *          console.log("Bar");
+     *      }
+     * });
+     * AJL("MyScope.MyModule.MyFunction", function() {
+     *      console.log("Some function or constructor");
+     * });
+     * //And then using it like this
+     * MyScope.MyModule.MySubmodule.bar();
+     * MyScope.MyModule.MyFunction();
+     */
+    AJL = function () {
+        var packageManager = AJL.PackageManager,
+            namespace = AJL.Namespace,
+            helper = AJL.Helper,
+            packageInstance = {},
+            packageName = '',
+            packageAssets = [],
+            packageConfig = {},
+            argLength = arguments.length,
+            argFirst,
+            argSecond,
+            i;
+
+        //Switch of arguments length for detect what need to do
+        switch (argLength) {
+            case 0:
+                //If arguments not exists then just return PackageManager instance
+                return packageManager;
+            case 1:
+                argFirst = arguments[0];
+                //If this arg is string then return package with this name
+                if (helper.isString(argFirst)) {
+                    return packageManager.getPackage(argFirst);
+                }
+                break;
+            case 2:
+                argFirst = arguments[0];
+                argSecond = arguments[1];
+                //If first arg is string and second object or function
+                if (helper.isString(argFirst) && (helper.isObject(argSecond) || helper.isFunction(argSecond))) {
+                    //Then I think that it's namespace setting
+                    namespace.setNamespace(argFirst, argSecond);
+                    return packageManager;
+                }
+                break;
+            default:
+                break;
+        }
+        //If all predefined templates in arguments didn't decided then create packages from them
+        for (i = 0; i &lt; argLength; i++) {
+            if (!helper.isUndefined(arguments[i])) {
+                packageName = arguments[i].name;
+                packageAssets = arguments[i].assets;
+                packageConfig = arguments[i].config;
+                packageInstance = new AJL.Package(packageName, packageAssets, packageConfig);
+                packageManager.setPackage(packageInstance);
+            }
+        }
+
+        return packageManager;
+    };
+
+    //This hack needed for init EntryPoint.js when all AJL.min.js will loaded
+    setTimeout(function () {
+        AJL.Loader.loadEntryPoint();
+    }, 0);
+
+    return AJL;
+})(window, document, window.AJL || {});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

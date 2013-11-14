@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Config</title>
+    <title>JSDoc: Class: PackageConfig</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Config</h1>
+    <h1 class="page-title">Class: PackageConfig</h1>
     
     
 
@@ -27,8 +27,12 @@
     
 <header>
     <h2>
-    Config
+        <span class="ancestors"><a href="AJL.html">AJL</a>.</span>
+    
+    PackageConfig
     </h2>
+    
+        <div class="class-description">{AJL.PackageConfig}</div>
     
 </header>  
 
@@ -39,7 +43,7 @@
     
         
 <dt>
-    <h4 class="name" id="Config"><span class="type-signature"></span>new Config<span class="signature">(params)</span><span class="type-signature"> &rarr; {<a href="AJL.Config.html">AJL.Config</a>}</span></h4>
+    <h4 class="name" id="PackageConfig"><span class="type-signature"></span>new PackageConfig<span class="signature">(params)</span><span class="type-signature"> &rarr; {<a href="AJL.PackageConfig.html">AJL.PackageConfig</a>}</span></h4>
     
     
 </dt>
@@ -47,7 +51,7 @@
     
     
     <div class="description">
-        Creating new Configuration object for {AJL.Package}
+        Create configuration object for Package
     </div>
     
 
@@ -87,10 +91,7 @@
             <td class="type">
             
                 
-<span class="param-type">collection</span>
-|
-
-<span class="param-type">object</span>
+<span class="param-type">Object</span>
 
 
             
@@ -100,168 +101,11 @@
             
             
             
-            <td class="description last">Parameters for extend default configuration</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Eugene Obrezkov</li>
-        </ul>
-    </dd>
-    
-    
-    
-    <dt class="tag-copyright">Copyright:</dt>
-    <dd class="tag-copyright"><ul class="dummy"><li>2013 MIT License</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Config.js.html">PackageConfig.js</a>, <a href="Config.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="AJL.Config.html">AJL.Config</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="options"><span class="type-signature">&lt;inner> </span>options<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    
-
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">
+            <td class="description last">Object with configuration
                 <h6>Properties</h6>
+                
 
-<table class="props">
+<table class="params">
     <thead>
 	<tr>
 		
@@ -289,7 +133,7 @@
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -299,7 +143,7 @@
             
             
             
-            <td class="description last">Asynchronous loading of package</td>
+            <td class="description last">Asynchronous loading of package or not</td>
         </tr>
 	
 	
@@ -312,7 +156,7 @@
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -322,7 +166,30 @@
             
             
             
-            <td class="description last">Lazy loading (load package on window.load)</td>
+            <td class="description last">Lazy loading of package (waiting for window loads)</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>depend</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Array of Package's names which need to load before load this</td>
         </tr>
 	
 	
@@ -335,7 +202,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -345,7 +212,7 @@
             
             
             
-            <td class="description last">type-attr for script-tag</td>
+            <td class="description last">This value write in script tag in type attribute</td>
         </tr>
 	
 	
@@ -358,7 +225,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -368,7 +235,7 @@
             
             
             
-            <td class="description last">type-attr for link-tag of css</td>
+            <td class="description last">This value write in link tag in type attribute</td>
         </tr>
 	
 	
@@ -381,7 +248,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -391,7 +258,7 @@
             
             
             
-            <td class="description last">rel-attr for link-tag of css</td>
+            <td class="description last">This value write in link tag in rel attribute</td>
         </tr>
 	
 	
@@ -402,8 +269,11 @@
 	
 	
 	</tbody>
-</table></dl>
-        
+</table>
+    
+    
+    
+<dl class="details">
     
         
     
@@ -425,7 +295,124 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Config.js.html">PackageConfig.js</a>, <a href="Config.js.html#line20">line 20</a>
+        <a href="PackageConfig.js.html">PackageConfig.js</a>, <a href="PackageConfig.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="AJL.PackageConfig.html">AJL.PackageConfig</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>new AJL.PackageConfig({
+     async: false,
+     lazy: true,
+     depend: ['Package One Name', 'Package Two Name']
+});</code></pre>
+
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> :Object</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Configuration object with params
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PackageConfig.js.html">PackageConfig.js</a>, <a href="PackageConfig.js.html#line36">line 36</a>
     </li></ul></dd>
     
     
@@ -449,7 +436,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(key)</span><span class="type-signature"> &rarr; {*|null}</span></h4>
+    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(key)</span><span class="type-signature"> &rarr; {*}</span></h4>
     
     
 </dt>
@@ -457,7 +444,7 @@
     
     
     <div class="description">
-        Return value from config storage by key
+        Get item from configuration storage of Package
     </div>
     
 
@@ -497,7 +484,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -507,7 +494,7 @@
             
             
             
-            <td class="description last">Key in storage</td>
+            <td class="description last">Name of value in storage</td>
         </tr>
 	
 	
@@ -538,7 +525,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Config.js.html">PackageConfig.js</a>, <a href="Config.js.html#line36">line 36</a>
+        <a href="PackageConfig.js.html">PackageConfig.js</a>, <a href="PackageConfig.js.html#line47">line 47</a>
     </li></ul></dd>
     
     
@@ -562,10 +549,6 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    Value if success and null if not
-</div>
-
 
 
 <dl>
@@ -575,9 +558,6 @@
 	<dd>
 		
 <span class="param-type">*</span>
-|
-
-<span class="param-type">null</span>
 
 
 	</dd>
@@ -586,12 +566,17 @@
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>myConfig.getItem('dependMap');</code></pre>
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="setConfigFromObject"><span class="type-signature"></span>setConfigFromObject<span class="signature">(param)</span><span class="type-signature"> &rarr; {<a href="AJL.Config.html">AJL.Config</a>}</span></h4>
+    <h4 class="name" id="setItem"><span class="type-signature"></span>setItem<span class="signature">(key, value)</span><span class="type-signature"> &rarr; {<a href="AJL.PackageConfig.html">AJL.PackageConfig</a>}</span></h4>
     
     
 </dt>
@@ -599,142 +584,7 @@
     
     
     <div class="description">
-        Set current config variables from object
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>param</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Object which need set</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Config.js.html">PackageConfig.js</a>, <a href="Config.js.html#line60">line 60</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="AJL.Config.html">AJL.Config</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="setItem"><span class="type-signature"></span>setItem<span class="signature">(key, value)</span><span class="type-signature"> &rarr; {<a href="AJL.Config.html">AJL.Config</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Set item in config storage
+        Set item in configuration storage of Package
     </div>
     
 
@@ -774,7 +624,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -784,7 +634,7 @@
             
             
             
-            <td class="description last">Key in storage</td>
+            <td class="description last">Name of value in storage</td>
         </tr>
 	
 	
@@ -807,7 +657,7 @@
             
             
             
-            <td class="description last">Value what need to write</td>
+            <td class="description last">Value of this param</td>
         </tr>
 	
 	
@@ -838,7 +688,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Config.js.html">PackageConfig.js</a>, <a href="Config.js.html#line50">line 50</a>
+        <a href="PackageConfig.js.html">PackageConfig.js</a>, <a href="PackageConfig.js.html#line63">line 63</a>
     </li></ul></dd>
     
     
@@ -870,7 +720,7 @@
 	</dt>
 	<dd>
 		
-<span class="param-type"><a href="AJL.Config.html">AJL.Config</a></span>
+<span class="param-type"><a href="AJL.PackageConfig.html">AJL.PackageConfig</a></span>
 
 
 	</dd>
@@ -878,6 +728,11 @@
 
         
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>myConfig.setItem('MyOwnParam', 'Foo');</code></pre>
+
     
 </dd>
 
@@ -897,13 +752,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Config.html">Config</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Sun Nov 03 2013 14:43:40 GMT+0200 (EET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
 </footer>
 
 <script> prettyPrint(); </script>

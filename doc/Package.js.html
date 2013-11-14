@@ -25,92 +25,120 @@
     
     <section>
         <article>
-            <pre class="prettyprint source"><code>var AJL = (function Package(window, document, AJL) {
+            <pre class="prettyprint source"><code>var AJL = (function (window, document, AJL) {
     if (!AJL.Package) {
         /**
-         * Creating new Package
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @param {string} name Name of Package
-         * @param {collection|object} assets Collection of assets URL for loading
-         * @param {object} [params] Parameters for extend default config
+         * Create Package
+         * @param {String} name Name of package
+         * @param {Array} assets Array of assets that need load
+         * @param {Object} params Configuration object for this package
+         * @param {Boolean} params.async Asynchronous loading of package or not
+         * @param {Boolean} params.lazy Lazy loading of package (waiting for window loads)
+         * @param {Array} params.depend Array of Package's names which need to load before load this
+         * @param {String} params.scriptTypeAttr This value write in script tag in type attribute
+         * @param {String} params.linkCssTypeAttr This value write in link tag in type attribute
+         * @param {String} params.linkCssRelAttr This value write in link tag in rel attribute
          * @returns {AJL.Package}
          * @constructor
+         * @class {AJL.Package}
+         * @example
+         * new AJL.Package('My Own Package', [
+         *          'foo.js',
+         *          'bar.js',
+         *          'style.css'
+         *      ], {
+         *          async: false,
+         *          lazy: true
+         *      });
          */
         AJL.Package = function (name, assets, params) {
             /**
-             * @property name Name of Package
-             * @type {string}
+             * Name of package
+             * @type {String}
              */
             this.name = name;
             /**
-             * @property assets Collections of asset's URLs
-             * @type {collection|Object}
+             * Assets of this package
+             * @type {Array}
              */
             this.assets = assets;
             /**
-             * @property config Configuration object of this Package
-             * @type {AJL.Config}
+             * Configuration object of this package
+             * @type {AJL.PackageConfig}
              */
-            this.config = new AJL.Config(params);
-            AJL.PackageManager.setPackage(this);
+            this.config = new AJL.PackageConfig(params);
             return this;
         };
+
         AJL.Package.prototype = {
             /**
-             * Init generating and append tags into head.
-             * Call methods from {AJL.Loader}
+             * Get name of package
+             * @returns {String} Name of Package
+             * @example
+             * myPackage.getName();
              */
-            initLoader: function () {
-                var self = this,
-                    assets = self.assets,
-                    config = self.config,
-                    currentUrl = '';
-                for (var url in assets) {
-                    if (assets.hasOwnProperty(url)) {
-                        currentUrl = assets[url];
-                        if (AJL.Helper.isScriptFile(currentUrl)) {
-                            //We need use call 'cause Loader must execute in context of current package's config
-                            AJL.Loader.appendScriptTag.call(config, currentUrl);
-                            continue;
-                        }
-                        if (AJL.Helper.isCssFile(currentUrl)) {
-                            //We need use call 'cause Loader must execute in context of current package's config
-                            AJL.Loader.appendLinkTag.call(config, currentUrl);
-                        }
-                    }
-                }
+            getName: function () {
+                return this.name;
             },
             /**
-             * Load Package and Assets Files from this Package
-             * @returns {boolean} True if Package successful loaded
+             * Set new name for package
+             * @param {String} name New name of package
+             * @example
+             * myPackage.setName('New name');
+             */
+            setName: function (name) {
+                this.name = name;
+            },
+            /**
+             * Get assets from package
+             * @returns {Array} Array of asset's URL
+             * @example
+             * myPackage.getAssets();
+             */
+            getAssets: function () {
+                return this.assets;
+            },
+            /**
+             * Set new assets for package
+             * @param {Array} assets New array of asset's URL for package
+             * @example
+             * myPackage.setAssets([
+             *          'new.js',
+             *          'new2.js'
+             *      ]);
+             */
+            setAssets: function (assets) {
+                this.assets = assets;
+            },
+            /**
+             * Get config object from package
+             * @returns {AJL.PackageConfig}
+             * @example
+             * myPackage.getConfig();
+             */
+            getConfig: function () {
+                return this.config;
+            },
+            /**
+             * Set new config object for package
+             * @param {AJL.PackageConfig} config New object of configuration
+             * @example
+             * myPackage.setConfig(
+             *      new AJL.PackageConfig({
+             *          lazy: true,
+             *          depend: ['mySecondPackageName']
+             *      }));
+             */
+            setConfig: function (config) {
+                this.config = config;
+            },
+            /**
+             * Start loading of package
+             * @example
+             * myPackage.load();
              */
             load: function () {
-                var self = this,
-                    config = self.config,
-                    assets = self.assets;
-                //If assets array empty then halt loading of package
-                if (AJL.Helper.isEmpty(assets)) {
-                    return false;
-                }
-                //If need to wait window.load than call lazyLoad and return
-                if (config.getItem('lazy') == true) {
-                    self.lazyLoad();
-                    return true;
-                }
-                //In other cases just call initLoader directly for start loading
-                self.initLoader();
-                return true;
-            },
-            /**
-             * Lazy loading of package.
-             * This method attachEvent window.onload by {AJL.Helper.attachEvent}
-             */
-            lazyLoad: function () {
-                var self = this;
-                AJL.Helper.attachEvent(window, 'load', function () {
-                    self.initLoader();
-                });
+                AJL.Loader.loadPackage.call(this);
             }
         };
     }
@@ -125,13 +153,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Config.html">Config</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Sun Nov 03 2013 14:43:40 GMT+0200 (EET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
 </footer>
 
 <script> prettyPrint(); </script>

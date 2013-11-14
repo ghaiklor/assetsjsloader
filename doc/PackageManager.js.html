@@ -25,62 +25,178 @@
     
     <section>
         <article>
-            <pre class="prettyprint source"><code>var AJL = (function PackageManager(window, document, AJL) {
+            <pre class="prettyprint source"><code>var AJL = (function (window, document, AJL) {
     if (!AJL.PackageManager) {
+        var packages = [];
+
         /**
-         * Package's Manager of AJL
-         * @author Eugene Obrezkov
-         * @copyright 2013 MIT License
-         * @returns {AJL.PackageManager}
-         * @constructor
+         * @namespace AJL.PackageManager
          */
-        AJL.PackageManager = function () {
-            /**
-             * @property packages Object of packages in AJL
-             * @type {object}
-             */
-            this.packages = {};
-            return this;
-        };
-        AJL.PackageManager.prototype = {
+        AJL.PackageManager = {
             /**
              * Get package from AJL
-             * @param {string} name Name of package
-             * @returns {boolean|AJL.Package} Package if successful and false if not
+             * @param {String} name Name of package
+             * @returns {Boolean|AJL.Package} Package if successful and false if not
+             * @example
+             * AJL.PackageManager.getPackage('My Package Name');
              */
             getPackage: function (name) {
-                var packages = this.packages;
-                if (packages.hasOwnProperty(name)) {
+                var helper = AJL.Helper;
+
+                if (packages.hasOwnProperty(name) && helper.isInstanceOf(packages[name], AJL.Package)) {
                     return packages[name];
                 }
+
                 return false;
+            },
+            /**
+             * Get packages from AJL
+             * @param {Array} names Array of Package's names which need get
+             * @returns {Array}
+             * @example
+             * AJL.PackageManager.getPackages([
+             *          'First Package Name',
+             *          'Second Package Name'
+             *      ]);
+             */
+            getPackages: function (names) {
+                var self = this,
+                    packageArray = [],
+                    curName,
+                    curPackage,
+                    namesLength = names.length,
+                    i;
+
+                for (i = 0; i &lt; namesLength; i++) {
+                    curName = names[i];
+                    curPackage = self.getPackage(curName);
+                    if (curPackage) {
+                        packageArray.push(curPackage);
+                    }
+                }
+
+                return packageArray;
             },
             /**
              * Add package to PackageManager or rewrite exists
              * @param {AJL.Package} pack Package what need to add
-             * @returns {boolean} True if successful
+             * @returns {boolean|AJL.PackageManager} False if not successful and PackageManager if successful
+             * @example
+             * AJL.PackageManager.setPackage(
+             *      new AJL.Package('New Package', [
+             *              'foo.js',
+             *              'bar.js',
+             *              'style.css',
+             *          ], {
+             *              async: false,
+             *              lazy: true,
+             *              depend: ['Some other Package Name']
+             *          })
+             *      );
              */
             setPackage: function (pack) {
-                var packages = this.packages;
-                if (!AJL.Helper.isEmpty(pack.name)) {
-                    packages[pack.name] = pack;
-                    return true;
+                var helper = AJL.Helper,
+                    packName;
+
+                if (helper.isInstanceOf(pack, AJL.Package)) {
+                    packName = pack.getName();
+                    if (!helper.isEmpty(packName)) {
+                        packages[packName] = pack;
+                        return this;
+                    }
+                }
+
+                return false;
+            },
+            /**
+             * Add Packages to PackageManager or rewrite exists
+             * @param {Array} packs Array of AJL.Package objects
+             * @returns {AJL.PackageManager}
+             * @example
+             * var FooPackage = new AJL.Package('Foo', ['foo.js', 'foo2.js']);
+             * var BarPackage = new AJL.Package('Bar', ['bar.js', 'bar2.js'], {
+             *      async: false,
+             *      depend: ['Foo']
+             * });
+             * AJL.PackageManager.setPackages([FooPackage, BarPackage]);
+             */
+            setPackages: function (packs) {
+                var self = this,
+                    helper = AJL.Helper,
+                    curPack,
+                    packsLength = packs.length,
+                    i;
+
+                for (i = 0; i &lt; packsLength; i++) {
+                    curPack = packs[i];
+                    if (helper.isInstanceOf(curPack, AJL.Package)) {
+                        self.setPackage(curPack);
+                    }
+                }
+                return this;
+            },
+            /**
+             * Load all packages in AJL
+             * @return {AJL.PackageManager}
+             * @example
+             * AJL.PackageManager.loadAll();
+             */
+            loadAll: function () {
+                var helper = AJL.Helper,
+                    curPack;
+
+                for (var pack in packages) {
+                    if (packages.hasOwnProperty(pack)) {
+                        curPack = packages[pack];
+                        if (helper.isInstanceOf(curPack, AJL.Package)) {
+                            curPack.load();
+                        }
+                    }
+                }
+                return this;
+            },
+            /**
+             * Load one package by name
+             * @param {string} name Name of package to load
+             * @return {boolean|AJL.PackageManager} PackageManager if loaded and false if not
+             * @example
+             * AJL.PackageManager.loadByName('Own Package Name');
+             */
+            loadByName: function (name) {
+                var helper = AJL.Helper;
+
+                if (packages.hasOwnProperty(name) && helper.isInstanceOf(packages[name], AJL.Package)) {
+                    packages[name].load();
+                    return this;
                 }
                 return false;
             },
             /**
-             * Load all packages in AJL
+             * Load packages by names
+             * @param {Array} names Array of Package's names to load
+             * @returns {AJL.PackageManager}
+             * @example
+             * AJL.PackageManager.loadByNames([
+             *      'First Package Name',
+             *      'Second Package Name'
+             * ]);
              */
-            loadAll: function () {
-                var packages = this.packages;
-                for (var pack in packages) {
-                    if (packages.hasOwnProperty(pack)) {
-                        packages[pack].load();
+            loadByNames: function (names) {
+                var helper = AJL.Helper,
+                    curName,
+                    namesLength,
+                    i;
+
+                namesLength = names.length;
+                for (i = 0; i &lt; namesLength; i++) {
+                    curName = names[i];
+                    if (packages.hasOwnProperty(curName) && helper.isInstanceOf(packages[curName], AJL.Package)) {
+                        packages[curName].load();
                     }
                 }
+                return this;
             }
-        };
-        AJL.PackageManager = new AJL.PackageManager();
+        }
     }
     return AJL;
 })(window, document, window.AJL || {});</code></pre>
@@ -93,13 +209,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Config.html">Config</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Sun Nov 03 2013 14:43:40 GMT+0200 (EET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: PackageManager</title>
+    <title>JSDoc: Namespace: PackageManager</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: PackageManager</h1>
+    <h1 class="page-title">Namespace: PackageManager</h1>
     
     
 
@@ -27,6 +27,8 @@
     
 <header>
     <h2>
+        <span class="ancestors"><a href="AJL.html">AJL</a>.</span>
+    
     PackageManager
     </h2>
     
@@ -38,8 +40,65 @@
     
     
         
+        
+        
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+        
+        
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
 <dt>
-    <h4 class="name" id="PackageManager"><span class="type-signature"></span>new PackageManager<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="AJL.PackageManager.html">AJL.PackageManager</a>}</span></h4>
+    <h4 class="name" id="getPackage"><span class="type-signature">&lt;static> </span>getPackage<span class="signature">(name)</span><span class="type-signature"> &rarr; {Boolean|<a href="AJL.Package.html">AJL.Package</a>}</span></h4>
     
     
 </dt>
@@ -47,7 +106,297 @@
     
     
     <div class="description">
-        Package's Manager of AJL
+        Get package from AJL
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Name of package</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Package if successful and false if not
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Boolean</span>
+|
+
+<span class="param-type"><a href="AJL.Package.html">AJL.Package</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>AJL.PackageManager.getPackage('My Package Name');</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getPackages"><span class="type-signature">&lt;static> </span>getPackages<span class="signature">(names)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Get packages from AJL
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>names</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Array of Package's names which need get</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Array</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>AJL.PackageManager.getPackages([
+         'First Package Name',
+         'Second Package Name'
+     ]);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="loadAll"><span class="type-signature">&lt;static> </span>loadAll<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="AJL.PackageManager.html">AJL.PackageManager</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Load all packages in AJL
     </div>
     
 
@@ -70,17 +419,7 @@
     
     
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Eugene Obrezkov</li>
-        </ul>
-    </dd>
     
-    
-    
-    <dt class="tag-copyright">Copyright:</dt>
-    <dd class="tag-copyright"><ul class="dummy"><li>2013 MIT License</li></ul></dd>
     
     
     
@@ -90,7 +429,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line10">line 10</a>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line117">line 117</a>
     </li></ul></dd>
     
     
@@ -131,140 +470,17 @@
         
     
     
-</dd>
-
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
+        <h5>Example</h5>
         
-        <dl>
-            
-<dt>
-    <h4 class="name" id="packages"><span class="type-signature"></span>packages<span class="type-signature"> :object</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">object</span>
+    <pre class="prettyprint"><code>AJL.PackageManager.loadAll();</code></pre>
 
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-        
-        <h5 class="subsection-title">Properties:</h5>
-        
-        <dl>
-
-<table class="props">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>packages</code></td>
-            
-            
-            <td class="type">
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Object of packages in AJL</td>
-        </tr>
-	
-	
-	</tbody>
-</table></dl>
-        
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
     
 </dd>
 
-        </dl>
-    
-    
-    
-        <h3 class="subsection-title">Methods</h3>
         
-        <dl>
             
 <dt>
-    <h4 class="name" id="getPackage"><span class="type-signature"></span>getPackage<span class="signature">(name)</span><span class="type-signature"> &rarr; {boolean|<a href="AJL.Package.html">AJL.Package</a>}</span></h4>
+    <h4 class="name" id="loadByName"><span class="type-signature">&lt;static> </span>loadByName<span class="signature">(name)</span><span class="type-signature"> &rarr; {boolean|<a href="AJL.PackageManager.html">AJL.PackageManager</a>}</span></h4>
     
     
 </dt>
@@ -272,7 +488,7 @@
     
     
     <div class="description">
-        Get package from AJL
+        Load one package by name
     </div>
     
 
@@ -322,7 +538,7 @@
             
             
             
-            <td class="description last">Name of package</td>
+            <td class="description last">Name of package to load</td>
         </tr>
 	
 	
@@ -353,7 +569,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line24">line 24</a>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line138">line 138</a>
     </li></ul></dd>
     
     
@@ -378,7 +594,7 @@
     
             
 <div class="param-desc">
-    Package if successful and false if not
+    PackageManager if loaded and false if not
 </div>
 
 
@@ -392,7 +608,7 @@
 <span class="param-type">boolean</span>
 |
 
-<span class="param-type"><a href="AJL.Package.html">AJL.Package</a></span>
+<span class="param-type"><a href="AJL.PackageManager.html">AJL.PackageManager</a></span>
 
 
 	</dd>
@@ -401,12 +617,17 @@
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>AJL.PackageManager.loadByName('Own Package Name');</code></pre>
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="loadAll"><span class="type-signature"></span>loadAll<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="loadByNames"><span class="type-signature">&lt;static> </span>loadByNames<span class="signature">(names)</span><span class="type-signature"> &rarr; {<a href="AJL.PackageManager.html">AJL.PackageManager</a>}</span></h4>
     
     
 </dt>
@@ -414,7 +635,7 @@
     
     
     <div class="description">
-        Load all packages in AJL
+        Load packages by names
     </div>
     
 
@@ -422,6 +643,54 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>names</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Array of Package's names to load</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -447,7 +716,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line47">line 47</a>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line157">line 157</a>
     </li></ul></dd>
     
     
@@ -468,14 +737,40 @@
     
     
     
+    <h5>Returns:</h5>
     
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="AJL.PackageManager.html">AJL.PackageManager</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>AJL.PackageManager.loadByNames([
+     'First Package Name',
+     'Second Package Name'
+]);</code></pre>
+
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="setPackage"><span class="type-signature"></span>setPackage<span class="signature">(pack)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="setPackage"><span class="type-signature">&lt;static> </span>setPackage<span class="signature">(pack)</span><span class="type-signature"> &rarr; {boolean|<a href="AJL.PackageManager.html">AJL.PackageManager</a>}</span></h4>
     
     
 </dt>
@@ -564,7 +859,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line36">line 36</a>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line70">line 70</a>
     </li></ul></dd>
     
     
@@ -589,7 +884,7 @@
     
             
 <div class="param-desc">
-    True if successful
+    False if not successful and PackageManager if successful
 </div>
 
 
@@ -601,6 +896,9 @@
 	<dd>
 		
 <span class="param-type">boolean</span>
+|
+
+<span class="param-type"><a href="AJL.PackageManager.html">AJL.PackageManager</a></span>
 
 
 	</dd>
@@ -608,6 +906,166 @@
 
         
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>AJL.PackageManager.setPackage(
+     new AJL.Package('New Package', [
+             'foo.js',
+             'bar.js',
+             'style.css',
+         ], {
+             async: false,
+             lazy: true,
+             depend: ['Some other Package Name']
+         })
+     );</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="setPackages"><span class="type-signature">&lt;static> </span>setPackages<span class="signature">(packs)</span><span class="type-signature"> &rarr; {<a href="AJL.PackageManager.html">AJL.PackageManager</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Add Packages to PackageManager or rewrite exists
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>packs</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Array of AJL.Package objects</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="PackageManager.js.html">PackageManager.js</a>, <a href="PackageManager.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="AJL.PackageManager.html">AJL.PackageManager</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var FooPackage = new AJL.Package('Foo', ['foo.js', 'foo2.js']);
+var BarPackage = new AJL.Package('Bar', ['bar.js', 'bar2.js'], {
+     async: false,
+     depend: ['Foo']
+});
+AJL.PackageManager.setPackages([FooPackage, BarPackage]);</code></pre>
+
     
 </dd>
 
@@ -627,13 +1085,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Config.html">Config</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Sun Nov 03 2013 14:43:40 GMT+0200 (EET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
 </footer>
 
 <script> prettyPrint(); </script>

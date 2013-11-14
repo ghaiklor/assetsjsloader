@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Loader</title>
+    <title>JSDoc: Namespace: Loader</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Loader</h1>
+    <h1 class="page-title">Namespace: Loader</h1>
     
     
 
@@ -27,6 +27,8 @@
     
 <header>
     <h2>
+        <span class="ancestors"><a href="AJL.html">AJL</a>.</span>
+    
     Loader
     </h2>
     
@@ -38,26 +40,8 @@
     
     
         
-<dt>
-    <h4 class="name" id="Loader"><span class="type-signature"></span>new Loader<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="AJL.Loader.html">AJL.Loader</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Creating Loader object
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
+        
+        
 <dl class="details">
     
         
@@ -70,17 +54,7 @@
     
     
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Eugene Obrezkov</li>
-        </ul>
-    </dd>
     
-    
-    
-    <dt class="tag-copyright">Copyright:</dt>
-    <dd class="tag-copyright"><ul class="dummy"><li>2013 MIT License</li></ul></dd>
     
     
     
@@ -90,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line10">line 10</a>
+        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line5">line 5</a>
     </li></ul></dd>
     
     
@@ -101,38 +75,8 @@
     
 </dl>
 
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="AJL.Loader.html">AJL.Loader</a></span>
-
-
-	</dd>
-</dl>
-
         
-    
-    
-</dd>
-
+        
     
     </div>
     
@@ -154,7 +98,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="appendLinkTag"><span class="type-signature"></span>appendLinkTag<span class="signature">(src)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="loadEntryPoint"><span class="type-signature">&lt;static> </span>loadEntryPoint<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
@@ -162,65 +106,14 @@
     
     
     <div class="description">
-        Generate link tag and insert into head
+        Search data-ep in scripts tag and load EntryPoint.js file
     </div>
     
 
     
     
     
-        <h5>This:</h5>
-        <ul><li>{<a href="AJL.Config.html">AJL.Config</a>}</li></ul>
     
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>src</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">URL to link file</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -246,7 +139,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line45">line 45</a>
+        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line57">line 57</a>
     </li></ul></dd>
     
     
@@ -271,7 +164,7 @@
     
             
 <div class="param-desc">
-    True if successful
+    True if EntryPoint file exists and loaded
 </div>
 
 
@@ -291,12 +184,17 @@
         
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>AJL.Loader.loadEntryPoint();</code></pre>
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="appendScriptTag"><span class="type-signature"></span>appendScriptTag<span class="signature">(src)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="loadPackage"><span class="type-signature">&lt;static> </span>loadPackage<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
     
 </dt>
@@ -304,7 +202,7 @@
     
     
     <div class="description">
-        Generate script tag and insert into head
+        Function for proceed loading of Package
     </div>
     
 
@@ -312,57 +210,9 @@
     
     
         <h5>This:</h5>
-        <ul><li>{<a href="AJL.Config.html">AJL.Config</a>}</li></ul>
+        <ul><li><a href="AJL.Package.html">AJL.Package</a></li></ul>
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>src</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">URL to script file</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -388,7 +238,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line30">line 30</a>
+        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line23">line 23</a>
     </li></ul></dd>
     
     
@@ -412,10 +262,6 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    True if successful
-</div>
-
 
 
 <dl>
@@ -433,140 +279,17 @@
         
     
     
-</dd>
-
+        <h5>Example</h5>
         
-            
-<dt>
-    <h4 class="name" id="appendToHead"><span class="type-signature"></span>appendToHead<span class="signature">(element)</span><span class="type-signature"> &rarr; {<a href="AJL.Loader.html">AJL.Loader</a>}</span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        Append Element to head
-    </div>
-    
+    <pre class="prettyprint"><code>var myPackage = new AJL.Package('My Package', [
+     'foo.js',
+     'bar.js'
+], {
+     async: false,
+     lazy: true
+});
+AJL.Loader.loadPackage.call(myPackage);</code></pre>
 
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>element</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Element</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">Element which need to append</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Loader.js.html">Loader.js</a>, <a href="Loader.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="AJL.Loader.html">AJL.Loader</a></span>
-
-
-	</dd>
-</dl>
-
-        
-    
     
 </dd>
 
@@ -586,13 +309,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Config.html">Config</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Sun Nov 03 2013 14:43:40 GMT+0200 (EET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
 </footer>
 
 <script> prettyPrint(); </script>
