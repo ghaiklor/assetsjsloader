@@ -26,10 +26,13 @@ var AJL = (function (window, document, AJL) {
                 //Need iterate all parts of namespace without last one
                 partsLength = parts.length - 1;
                 for (i = 0; i < partsLength; i++) {
+                    //Remember current part
                     curPart = parts[i];
                     if (typeof parent[curPart] === 'undefined') {
+                        //If this part undefined then create empty
                         parent[curPart] = {};
                     }
+                    //Remember created part in parent
                     parent = parent[curPart];
                 }
                 //And last one of parts need to be filled by module param
@@ -54,6 +57,7 @@ var AJL = (function (window, document, AJL) {
                 for (i = 0; i < partsLength; i++) {
                     curPart = parts[i];
                     if (typeof parent[curPart] === "undefined") {
+                        //If all cycle we see something undefined then namespace not exists
                         return false;
                     }
                     parent = parent[curPart];

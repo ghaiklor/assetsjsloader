@@ -1,9 +1,48 @@
 var AJL = (function (window, document, AJL) {
     /**
-     * Make calls of other function in shorthand
+     * Make calls of others functions in shorthand syntax
      * @returns {AJL.PackageManager|Boolean}
      * @constructor
      * @namespace AJL
+     * @author Eugene Obrezkov
+     * @copyright 2013 MIT License
+     * @example
+     * //Create Packages with one call
+     * AJL({
+     *      name: "My Package",
+     *      assets: ['vendor/foo.js', 'vendor/bar.js']
+     * }, {
+     *      name: "Backbone",
+     *      assets: ['vendor/underscore.js', 'vendor/backbone.js']
+     * });
+     * //And this will create Packages which will be available through Package Manager
+     *
+     * //Get PackageManager for loading of some Packages
+     * var PackageManager = AJL();
+     * PackageManager.loadByName("My Package");
+     * //Or using chainloading
+     * AJL().loadByName("My Package");
+     *
+     * //Get Package from AJL
+     * var myPackage = AJL("My Package");
+     * //And then using it
+     * myPackage.load();
+     * //Or using chainloading again
+     * AJL("My Package").load();
+     *
+     * //Set own namespaces
+     * AJL("MyScope.MyModule.MySubmodule", {
+     *      foo: 'foo',
+     *      bar: function() {
+     *          console.log("Bar");
+     *      }
+     * });
+     * AJL("MyScope.MyModule.MyFunction", function() {
+     *      console.log("Some function or constructor");
+     * });
+     * //And then using it like this
+     * MyScope.MyModule.MySubmodule.bar();
+     * MyScope.MyModule.MyFunction();
      */
     AJL = function () {
         var packageManager = AJL.PackageManager,
@@ -18,6 +57,7 @@ var AJL = (function (window, document, AJL) {
             argSecond,
             i;
 
+        //Switch of arguments length for detect what need to do
         switch (argLength) {
             case 0:
                 //If arguments not exists then just return PackageManager instance

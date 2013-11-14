@@ -38,9 +38,9 @@
          */
         AJL.Helper = {
             /**
-             * Iterate through obj
+             * Iterate through object
              * @param {Array|Object|Collection} obj Object where need to iterate
-             * @param {Function} callback Function which was working while iterate
+             * @param {Function} callback Function which will working while iterate
              * @returns {Array|Object|Collection}
              * @example
              * AJL.Helper.each({
@@ -55,6 +55,8 @@
                     objLength = obj.length;
 
                 for (; i &lt; objLength;) {
+                    //For each element in obj call callback function
+                    //with call and change this context with current item
                     if (callback.call(obj[i], i, obj[i++]) === false) {
                         break;
                     }
@@ -63,6 +65,8 @@
             },
             /**
              * Extend object
+             * @param {Array|Collection|Object} target Target
+             * @param {Array|Collection|Object} object From which object extend target
              * @returns {Object|Collection} Resulting object
              * @example
              * AJL.Helper.extend({
@@ -71,70 +75,20 @@
              *      bar: function() {
              *          console.log("I'm a bar function");
              *      }
-             * }, {
-             *      third: 'third'
              * });
              */
-            extend: function () {
-                //TODO: I think that this need refactor
-                var options,
-                    name,
-                    src,
-                    copy,
-                    copyIsArray,
-                    clone,
-                    target = arguments[0] || {},
-                    i = 1,
-                    length = arguments.length,
-                    deep = false;
-
-                if (typeof target === "boolean") {
-                    deep = target;
-                    target = arguments[1] || {};
-                    i = 2;
-                }
-
-                if (typeof target !== "object" && !this.isFunction(target)) {
-                    target = {};
-                }
-
-                if (length === i) {
-                    target = this;
-                    --i;
-                }
-
-                for (; i &lt; length; i++) {
-                    if ((options = arguments[i]) != null) {
-                        for (name in options) {
-                            if (options.hasOwnProperty(name)) {
-                                src = target[name];
-                                copy = options[name];
-
-                                if (target === copy) {
-                                    continue;
-                                }
-
-                                if (deep && copy && ( this.isObject(copy) || (copyIsArray = this.isArray(copy)) )) {
-                                    if (copyIsArray) {
-                                        copyIsArray = false;
-                                        clone = src && this.isArray(src) ? src : [];
-                                    } else {
-                                        clone = src && this.isObject(src) ? src : {};
-                                    }
-                                    target[ name ] = this.extend(deep, clone, copy);
-                                } else if (copy !== undefined) {
-                                    target[ name ] = copy;
-                                }
-                            }
-                        }
+            extend: function (target, object) {
+                var item;
+                for (item in object) {
+                    if (object.hasOwnProperty(item)) {
+                        target[item] = object[item];
                     }
                 }
-
                 return target;
             },
             /**
              * Get extension of filename
-             * @param {String} fileName Filename from we need get extension
+             * @param {String} fileName Filename from which we need get extension
              * @returns {String} Extension of file
              * @example
              * AJL.Helper.getExtension('SomeFileName.js');
@@ -143,7 +97,7 @@
                 return fileName.split('.').pop();
             },
             /**
-             * Check if this file have js-extensions
+             * Check if this file has js-extensions
              * @param {String} url URL of file that need to check
              * @returns {Boolean} True if is script file
              * @example
@@ -153,7 +107,7 @@
                 return scriptFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
-             * Check if this file have css-extensions
+             * Check if this file has css-extensions
              * @param {String} url URL of file that need to check
              * @returns {Boolean} True if is css file
              * @example
@@ -163,8 +117,8 @@
                 return linkFiles.indexOf(this.getExtension(url)) != -1;
             },
             /**
-             * Check variable for empty
-             * @param {*} param Variable that need to check
+             * Is variable empty or not
+             * @param {*} param Variable which need check
              * @returns {Boolean} True if empty
              * @example
              * AJL.Helper.isEmpty([]);
@@ -173,8 +127,8 @@
                 return this.isUndefined(param) || param == '' || param.length == 0;
             },
             /**
-             * Check variable for undefined or null
-             * @param {*} param Variable that need to check
+             * Is variable undefined
+             * @param {*} param Variable which need check
              * @returns {Boolean} True if undefined or null
              * @example
              * AJL.Helper.isUndefined(undefined);
@@ -222,7 +176,7 @@
             /**
              * Check if variable instanceof of object
              * @param {*} instance Instance that need to check
-             * @param {*} obj Object
+             * @param {*} obj Object or Function
              * @returns {boolean} True if Instance instanceof Obj
              * @example
              * AJL.Helper.isInstanceOf(myPackage, AJL.Package);
@@ -234,7 +188,7 @@
                 return (instance instanceof obj);
             },
             /**
-             * Check if variable is function
+             * Check if it is function
              * @param {*} obj What need check
              * @returns {boolean} True if this function
              * @example
@@ -246,7 +200,7 @@
                 return this.classType(obj) === "function";
             },
             /**
-             * Check ib variable is array
+             * Check if variable it is array
              * @param obj What need check
              * @returns {boolean} True if it's array
              * @example
@@ -256,7 +210,7 @@
                 return this.classType(obj) === 'array';
             },
             /**
-             * Check if variable is global scoped window object
+             * Check if variable it is global scope - window object
              * @param obj What need check
              * @returns {boolean} True if this window
              * @example
@@ -268,7 +222,7 @@
                 return obj != null && obj == obj.window;
             },
             /**
-             * Check if variable is string type
+             * Check if variable it is string type
              * @param {*} param What need check
              * @returns {boolean} True if this string
              * @example
@@ -278,7 +232,7 @@
                 return this.classType(param) === "string";
             },
             /**
-             * Check if val exists in array
+             * Check if value exists in array
              * @param val Value which we search
              * @param arr Array where we search
              * @returns {boolean} True if exists and false if not
@@ -313,21 +267,19 @@
              */
             attachEvent: function (obj, type, fn) {
                 if (obj.attachEvent) {
+                    //Fallback for IE and old browsers
                     obj['e' + type + fn] = fn;
                     obj[type + fn] = function () {
                         obj['e' + type + fn](window.event);
                     };
                     obj.attachEvent('on' + type, obj[type + fn]);
                 } else {
-                    //FIXME: addEventListener not works now
-                    //But if call fn() manually it's working
-                    //fn();
                     obj.addEventListener(type, fn, false);
                 }
             },
             /**
              * Detach event from object
-             * @param {*} obj Object where event assignee
+             * @param {*} obj Object where event assigned
              * @param {string} type Type of event
              * @param {function} fn Function of event
              * @example
@@ -339,6 +291,7 @@
                 if (obj.removeEventListener) {
                     obj.removeEventListener(type, fn, false);
                 } else {
+                    //Fallback for IE and older browsers
                     obj.detachEvent('on' + type, obj[type + fn]);
                     obj[type + fn] = null;
                     obj['e' + type + fn] = null;
@@ -361,13 +314,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="AJL.Package.html">Package</a></li><li><a href="AJL.PackageConfig.html">PackageConfig</a></li></ul><h3>Namespaces</h3><ul><li><a href="AJL.html">AJL</a></li><li><a href="AJL.Helper.html">Helper</a></li><li><a href="AJL.Loader.html">Loader</a></li><li><a href="AJL.Namespace.html">Namespace</a></li><li><a href="AJL.PackageManager.html">PackageManager</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Wed Nov 13 2013 20:26:27 GMT+0200 (EET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-dev</a> on Thu Nov 14 2013 21:34:36 GMT+0200 (EET)
 </footer>
 
 <script> prettyPrint(); </script>

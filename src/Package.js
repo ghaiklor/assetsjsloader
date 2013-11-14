@@ -5,6 +5,12 @@ var AJL = (function (window, document, AJL) {
          * @param {String} name Name of package
          * @param {Array} assets Array of assets that need load
          * @param {Object} params Configuration object for this package
+         * @param {Boolean} params.async Asynchronous loading of package or not
+         * @param {Boolean} params.lazy Lazy loading of package (waiting for window loads)
+         * @param {Array} params.depend Array of Package's names which need to load before load this
+         * @param {String} params.scriptTypeAttr This value write in script tag in type attribute
+         * @param {String} params.linkCssTypeAttr This value write in link tag in type attribute
+         * @param {String} params.linkCssRelAttr This value write in link tag in rel attribute
          * @returns {AJL.Package}
          * @constructor
          * @class {AJL.Package}
@@ -40,7 +46,7 @@ var AJL = (function (window, document, AJL) {
         AJL.Package.prototype = {
             /**
              * Get name of package
-             * @returns {String}
+             * @returns {String} Name of Package
              * @example
              * myPackage.getName();
              */
@@ -58,7 +64,7 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Get assets from package
-             * @returns {Array}
+             * @returns {Array} Array of asset's URL
              * @example
              * myPackage.getAssets();
              */
@@ -67,7 +73,7 @@ var AJL = (function (window, document, AJL) {
             },
             /**
              * Set new assets for package
-             * @param {Array} assets New array of assets for package
+             * @param {Array} assets New array of asset's URL for package
              * @example
              * myPackage.setAssets([
              *          'new.js',

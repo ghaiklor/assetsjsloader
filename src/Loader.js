@@ -2,9 +2,12 @@ var AJL = (function (window, document, AJL) {
     if (!AJL.Loader) {
         var loadedAssets = [];
 
+        /**
+         * @namespace AJL.Loader
+         */
         AJL.Loader = {
             /**
-             * Load Package
+             * Function for proceed loading of Package
              * @this AJL.Package
              * @returns {boolean}
              * @example
@@ -41,7 +44,7 @@ var AJL = (function (window, document, AJL) {
                     return true;
                 }
 
-                //In other cases just call initLoader directly for start loading
+                //In other cases just call startLoading directly for start loading
                 startLoading.call(pack);
                 return true;
             },
@@ -100,19 +103,24 @@ var AJL = (function (window, document, AJL) {
                 currentUrl = '',
                 assetsLength = assets.length,
                 i;
+            //Iterate through all assets array
             for (i = 0; i < assetsLength; i++) {
                 currentUrl = assets[i];
 
+                //If current asset url is loaded already then continue to next one
                 if (helper.isExistsInArray(currentUrl, loadedAssets)) {
                     continue;
                 }
 
+                //If current asset not loaded then push to loadedAssets array for remember it
                 loadedAssets.push(currentUrl);
                 if (helper.isScriptFile(currentUrl)) {
+                    //Append script tag
                     appendScriptTag(currentUrl, config.getItem('async'), config.getItem('scriptTypeAttr'));
                     continue;
                 }
                 if (helper.isCssFile(currentUrl)) {
+                    //Append link tag
                     appendLinkTag(currentUrl, config.getItem('linkCssRelAttr'), config.getItem('linkCssTypeAttr'));
                 }
             }
