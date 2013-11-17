@@ -114,29 +114,26 @@
     </li>
 </ol>
 
-<pre>
-<code>
+<pre><code>
     AJL({
-    name: "jQuery",
-    assets: ['js/vendor/jquery.min.js'],
-    config: {
-    async: false
-    }
+        name: "jQuery",
+        assets: ['js/vendor/jquery.min.js'],
+        config: {
+            async: false
+        }
     }, {
-    name: "jQuery Plugins",
-    assets: ['js/vendor/jquery.plugin.js', 'js/vendor/jquery.plugin2.js'],
-    config: {
-    depend: ['jQuery']
-    }
+        name: "jQuery Plugins",
+        assets: ['js/vendor/jquery.plugin.js', 'js/vendor/jquery.plugin2.js'],
+        config: {
+            depend: ['jQuery']
+        }
     }, {
-    name: "My Scripts",
-    assets: ['js/foo.js', 'js/bar.js'],
-    config: {
-    lazy: true
-    }
-    }).loadAll();
-</code>
-</pre>
+        name: "My Scripts",
+        assets: ['js/foo.js', 'js/bar.js'],
+        config: {
+            lazy: true
+        }
+    }).loadAll();</code></pre>
 
 <p>
     This configuration is only an example of AJL using. The above code will create three packages with names
