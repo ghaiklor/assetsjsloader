@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>AssetsJSLoader by ghaiklor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <title>AssetsJSLoader</title>
+
     <link rel="stylesheet" href="vendor/stylesheets/styles.css">
     <link rel="stylesheet" href="vendor/stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://yandex.st/highlightjs/7.4/highlight.min.js"></script>
     <script src="vendor/javascripts/main.js"></script>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
 <header>
@@ -37,201 +39,235 @@
 <!-- end banner -->
 
 <div class="wrapper">
-    <nav>
-        <ul></ul>
-    </nav>
-    <section>
-        <h1>
-            <a name="assetsjsloader-ajl" class="anchor" href="#assetsjsloader-ajl"><span
-                    class="octicon octicon-link"></span></a>AssetsJSLoader (AJL)</h1>
+<nav>
+    <ul></ul>
+</nav>
+<section>
+<h1>
+    <a name="assetsjsloader-ajl" class="anchor" href="#assetsjsloader-ajl">
+        <span class="octicon octicon-link"></span>
+    </a>AssetsJSLoader
+</h1>
 
-        <p><strong>AJL</strong> has been designed to simplify the management of loading javascript and css files. Its
-            main feature is the ability to create your own packages of resources and load them only when necessary.</p>
+<p>
+    <strong>AssetsJSLoader</strong> has been designed to simplify the management of loading javascript and css
+    files. Its main feature is the ability to create your own packages of resources and load them only when
+    necessary.
+</p>
 
-        <p>As a result of the AJL work you get separated logic of resource including (JS or CSS files) from the view and
-            the only thing that connects you to your view it's script-tag which include AJL script.</p>
+<p>
+    As a result of the AJL work you get separated logic of resource including (JS or CSS files) from the view and
+    the only thing that connects you to your view it's script-tag which include AJL script.
+</p>
 
-        <h1>
-            <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features
-        </h1>
+<h1>
+    <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span>
+    </a>Features
+</h1>
 
-        <ul>
-            <li>Support for the JS-files and CSS-files.</li>
-            <li>Creating packages with the resources that you want to load.</li>
-            <li>Ability to define which mode to load packages.</li>
-            <li>Asynchronous loading of packages or not.</li>
-            <li>Loading packages only after loading all resources on page (Lazy Loading).</li>
-            <li>Built-in package manager will simplify the work with loading and creating packages.</li>
-            <li>The ability to create their own namespaces with maximum ease and flexibility.</li>
-            <li>Additional functions to verify the existence of namespace and set callback function when creating some
-                namespace.
-            </li>
-            <li>You can use the shorthand for the most common functions. Such as creating package, set namespaces,
-                loading the package or packages, etc.
-            </li>
-            <li>All code is thoroughly documented with examples.</li>
-        </ul>
-        <h1>
-            <a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting
-            Started</h1>
+<ul>
+    <li>Support for the JS-files and CSS-files.</li>
+    <li>Creating packages with the resources that you want to load.</li>
+    <li>Ability to define which mode to load packages.</li>
+    <li>Asynchronous loading of packages or not.</li>
+    <li>Loading packages only after loading all resources on page (Lazy Loading).</li>
+    <li>Built-in package manager will simplify the work with loading and creating packages.</li>
+    <li>The ability to create their own namespaces with maximum ease and flexibility.</li>
+    <li>Additional functions to verify the existence of namespace and set callback function when creating some
+        namespace.
+    </li>
+    <li>You can use the shorthand for the most common functions. Such as creating package, set namespaces,
+        loading the package or packages, etc.
+    </li>
+    <li>All code is thoroughly documented with examples.</li>
+</ul>
+<h1>
+    <a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>
+    Getting Started
+</h1>
 
-        <ol>
-            <li><p>Download the latest version from the <strong>master</strong> branch <a
-                    href="https://github.com/ghaiklor/assetsjsloader/archive/master.zip">here</a> and connect it before
-                the end of the body tag. The compiled file ready-2-use can be found in a <em>dist</em> directory with
-                name <strong>AJL.min.js</strong>.</p></li>
-            <li><p>Connect the file in the script tag and specify the <strong>data-ep</strong> attribute like this:
-                <code>&lt;script src="js/vendor/AJL.min.js" data-ep="EntryPoint.js"&gt;&lt;/script&gt;</code>. <strong>EntryPoint.js</strong>
-                file is loaded immediately after loading the AJL and this is where you can configure all the required
-                packages and the necessary resources to load.</p></li>
-            <li><p>Inside the file <strong>EntryPoint.js</strong>, set what packages you want to create and what to do
-                when the page loads:</p></li>
-        </ol><pre><code>AJL({
-        name: "jQuery",
-        assets: ['js/vendor/jquery.min.js'],
-        config: {
-        async: false
-        }
-        }, {
-        name: "jQuery Plugins",
-        assets: ['js/vendor/jquery.plugin.js', 'js/vendor/jquery.plugin2.js'],
-        config: {
-        depend: ['jQuery']
-        }
-        }, {
-        name: "My Scripts",
-        assets: ['js/foo.js', 'js/bar.js'],
-        config: {
-        lazy: true
-        }
-        }).loadAll();
-    </code></pre>
-
-        <p>This configuration is only an example of AJL using. The above code will create three packages with names <em>jQuery</em>,
-            <em>jQuery Plugins</em>, <em>My Scripts</em> and immediately load them with dependency resolution.</p>
-
-        <p>Consider these three packages at a time.</p>
-
-        <p>Package named <em>jQuery</em> boot in the first place without the asynchronous loading.</p>
-
-        <p>Package with the <em>jQuery Plugins</em> name load all the plugins with this package, but only when the
-            package with name <em>jQuery</em> is loaded because <em>jQuery Plugins</em> depends on <em>jQuery</em>.</p>
-
-        <p>And last loaded package with the name <em>My Scripts</em> as it is configured to Lazy Loading. This means
-            that <em>My Scripts</em> is loaded when all resources are loaded on the page, even with pictures.</p>
-
-        <h1>
-            <a name="shorthand-usage" class="anchor" href="#shorthand-usage"><span class="octicon octicon-link"></span></a>Shorthand
-            usage</h1>
-
-        <p>Currently AJL supports four shorthands:</p>
-
-        <ol>
-            <li><p><code>AJL();</code> - returns a PackageManager.</p></li>
-            <li><p><code>AJL(packageName);</code> - return a Package from PackageManager.</p></li>
-            <li><p><code>AJL(namespaceString, moduleObjectOrFunction);</code> - specify the namespace for an own module.
-            </p></li>
-            <li><p><code>AJL(paramsForCreatingPackages, ..., etc, ...);</code> - create packages.</p></li>
-        </ol>
-        <p>More information can be found <a href="http://ghaiklor.github.io/assetsjsloader/doc/AJL.html">here</a>.</p>
-
-        <h1>
-            <a name="built-in-packagemanager" class="anchor" href="#built-in-packagemanager"><span
-                    class="octicon octicon-link"></span></a>Built-in PackageManager</h1>
-
-        <p>For get access to the integrated package manager enough to call a method with no parameters AJL(). Calling
-            this function will return you the module AJL.PackageManager, that has all the necessary functions for
-            working with packages:</p>
-
-        <ul>
-            <li><p><code>getPackage(nameString);</code> - returns an AJL.Package object.</p></li>
-            <li><p><code>getPackages(namesArray);</code> - return an array of AJL.Package objects.</p></li>
-            <li><p><code>setPackage(AJLPackage);</code> - adds a new package in PackageManager or rewrite exists.</p>
-            </li>
-            <li><p><code>setPackages(AJLPackagesArray);</code> - adds a new packages in PackageManager or rewrite exists
-                packages.</p></li>
-            <li><p><code>loadAll();</code> - load all packages in PackageManager.</p></li>
-            <li><p><code>loadByName(nameString);</code> - load package by name.</p></li>
-            <li><p><code>loadByNames(namesArray);</code> - load packages by their names.</p></li>
-        </ul>
-        <p>For more information about these features can be found <a
-                href="http://ghaiklor.github.io/assetsjsloader/doc/AJL.PackageManager.html">here</a></p>
-
-        <h1>
-            <a name="namespaces" class="anchor" href="#namespaces"><span class="octicon octicon-link"></span></a>Namespaces
-        </h1>
-
-        <p>There is also implemented namespaces are easy to use.</p>
-
-        <p>Enough when developing your module call the function AJL() and pass it two parameters: the first is the
-            string representation of the name of your namespace divided by dot <strong>"."</strong>, and the other
-            option - it's the module (function or object).</p>
-
-        <p>Here is an example module foo.js which we want to locate in window.<strong>MyModule.SubModule</strong></p>
-
-<pre><code>AJL("MyModule.SubModule", (function() {
-    var privateVariable = "two";
-    var foo = {
-    methodOne: function() {
-    console.debug("Method One");
-    },
-    methodTwo: function() {
-    return privateVariable;
-    }
-    }
-    return foo;
-    })());
-</code></pre>
-
-        <p>The result of this code will be an object that is located in a global scope of window in
-            MyModule.SubModule.</p>
-
-        <p>And according to the use of your module can be reduced to such a is:</p>
-
-<pre><code>MyModule.SubModule.methodOne();
-    MyModule.SubModule.methodTwo();
-</code></pre>
-
-        <p>Also, use the namespace ensures that there will be no leakage of variables, objects or functions in the
-            global context <strong>window</strong>.</p>
-
-        <h1>
-            <a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation
-        </h1>
-
-        <p>All documentation is on this <a href="http://ghaiklor.github.io/assetsjsloader/doc/AJL.html">link</a>. Each
-            class or namespace described in detail in this document and each method is an example of use.</p>
-
-        <h1>
-            <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
-
-        <p>The MIT License (MIT)</p>
-
-        <p>Copyright (c) 2013 Eugene Obrezkov</p>
-
-        <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-            documentation files (the "Software"), to deal in the Software without restriction, including without
-            limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-            the Software, and to permit persons to whom the Software is furnished to do so, subject to the following
-            conditions:</p>
-
-        <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions
-            of the Software.</p>
-
-        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
-            AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-            OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-            WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-    </section>
-    <footer>
-        <p>Project maintained by <a href="https://github.com/ghaiklor">ghaiklor</a></p>
-
+<ol>
+    <li>
         <p>
-            <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a>
-            </small>
+            Download the latest version from the <strong>master</strong> branch <a
+                href="https://github.com/ghaiklor/assetsjsloader/tarball/master">here</a> and connect it before
+            the end of the body tag. The compiled file ready-2-use can be found in a <em>dist</em> directory with
+            name <strong>AJL.min.js</strong>.
         </p>
-    </footer>
+    </li>
+    <li>
+        <p>
+            Connect the file in the script tag and specify the <strong>data-ep</strong> attribute like this:
+
+        <pre><code>&lt;script src="js/vendor/AJL.min.js" data-ep="EntryPoint.js"&gt;&lt;/script&gt;</code></pre>
+
+        <strong>EntryPoint.js</strong>
+        file is loaded immediately after loading the AJL and this is where you can configure all the required
+        packages and the necessary resources to load.
+        </p>
+    </li>
+    <li>
+        <p>
+            Inside the file <strong>EntryPoint.js</strong>, set what packages you want to create and what to do
+            when the page loads:
+        </p>
+    </li>
+</ol>
+
+<pre>
+<code>
+    AJL({
+    name: "jQuery",
+    assets: ['js/vendor/jquery.min.js'],
+    config: {
+    async: false
+    }
+    }, {
+    name: "jQuery Plugins",
+    assets: ['js/vendor/jquery.plugin.js', 'js/vendor/jquery.plugin2.js'],
+    config: {
+    depend: ['jQuery']
+    }
+    }, {
+    name: "My Scripts",
+    assets: ['js/foo.js', 'js/bar.js'],
+    config: {
+    lazy: true
+    }
+    }).loadAll();
+</code>
+</pre>
+
+<p>
+    This configuration is only an example of AJL using. The above code will create three packages with names
+    <em>jQuery</em>, <em>jQuery Plugins</em>, <em>My Scripts</em> and immediately load them with dependency resolution.
+</p>
+
+<p>
+    Consider these three packages at a time.
+</p>
+
+<p>Package named <em>jQuery</em> boot in the first place without the asynchronous loading.</p>
+
+<p>Package with the <em>jQuery Plugins</em> name load all the plugins with this package, but only when the
+    package with name <em>jQuery</em> is loaded because <em>jQuery Plugins</em> depends on <em>jQuery</em>.</p>
+
+<p>And last loaded package with the name <em>My Scripts</em> as it is configured to Lazy Loading. This means
+    that <em>My Scripts</em> is loaded when all resources are loaded on the page, even with pictures.</p>
+
+<h1>
+    <a name="shorthand-usage" class="anchor" href="#shorthand-usage"><span class="octicon octicon-link"></span>
+    </a>Shorthand usage</h1>
+
+<p>Currently AJL supports four shorthands:</p>
+
+<ol>
+    <li><p><code>AJL();</code> - returns a PackageManager.</p></li>
+    <li><p><code>AJL(packageName);</code> - return a Package from PackageManager.</p></li>
+    <li><p><code>AJL(namespaceString, moduleObjectOrFunction);</code> - specify the namespace for an own module.
+    </p></li>
+    <li><p><code>AJL(paramsForCreatingPackages, ..., etc, ...);</code> - create packages.</p></li>
+</ol>
+<p>More information can be found <a href="http://ghaiklor.github.io/assetsjsloader/doc/AJL.html">here</a>.</p>
+
+<h1>
+    <a name="built-in-packagemanager" class="anchor" href="#built-in-packagemanager"><span
+            class="octicon octicon-link"></span></a>Built-in PackageManager</h1>
+
+<p>For get access to the integrated package manager enough to call a method with no parameters AJL(). Calling
+    this function will return you the module AJL.PackageManager, that has all the necessary functions for
+    working with packages:</p>
+
+<ul>
+    <li><p><code>getPackage(nameString);</code> - returns an AJL.Package object.</p></li>
+    <li><p><code>getPackages(namesArray);</code> - return an array of AJL.Package objects.</p></li>
+    <li><p><code>setPackage(AJLPackage);</code> - adds a new package in PackageManager or rewrite exists.</p>
+    </li>
+    <li><p><code>setPackages(AJLPackagesArray);</code> - adds a new packages in PackageManager or rewrite exists
+        packages.</p></li>
+    <li><p><code>loadAll();</code> - load all packages in PackageManager.</p></li>
+    <li><p><code>loadByName(nameString);</code> - load package by name.</p></li>
+    <li><p><code>loadByNames(namesArray);</code> - load packages by their names.</p></li>
+</ul>
+<p>For more information about these features can be found <a
+        href="http://ghaiklor.github.io/assetsjsloader/doc/AJL.PackageManager.html">here</a></p>
+
+<h1>
+    <a name="namespaces" class="anchor" href="#namespaces"><span class="octicon octicon-link"></span></a>Namespaces
+</h1>
+
+<p>There is also implemented namespaces are easy to use.</p>
+
+<p>Enough when developing your module call the function AJL() and pass it two parameters: the first is the
+    string representation of the name of your namespace divided by dot <strong>"."</strong>, and the other
+    option - it's the module (function or object).</p>
+
+<p>Here is an example module foo.js which we want to locate in window.<strong>MyModule.SubModule</strong></p>
+
+<pre>
+    <code>
+        AJL("MyModule.SubModule", (function() {
+            var privateVariable = "two";
+            var foo = {
+                methodOne: function() {
+                    console.debug("Method One");
+                },
+                methodTwo: function() {
+                    return privateVariable;
+                }
+            }
+            return foo;
+        })());
+    </code>
+</pre>
+
+<p>The result of this code will be an object that is located in a global scope of window in
+    MyModule.SubModule.</p>
+
+<p>And according to the use of your module can be reduced to such a is:</p>
+
+<pre><code>MyModule.SubModule.methodOne();<br/>MyModule.SubModule.methodTwo();</code></pre>
+
+<p>Also, use the namespace ensures that there will be no leakage of variables, objects or functions in the
+    global context <strong>window</strong>.</p>
+
+<h1>
+    <a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation
+</h1>
+
+<p>All documentation is on this <a href="http://ghaiklor.github.io/assetsjsloader/doc/AJL.html">link</a>. Each
+    class or namespace described in detail in this document and each method is an example of use.</p>
+
+<h1>
+    <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2013 Eugene Obrezkov</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+    documentation files (the "Software"), to deal in the Software without restriction, including without
+    limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+    the Software, and to permit persons to whom the Software is furnished to do so, subject to the following
+    conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions
+    of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+    AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+    OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+</section>
+<footer>
+    <p>Project maintained by <a href="https://github.com/ghaiklor">ghaiklor</a></p>
+
+    <p>
+        <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a>
+        </small>
+    </p>
+</footer>
 </div>
 <!--[if !IE]>
 <script>fixScale(document);</script><![endif]-->
