@@ -1,4 +1,4 @@
-/*! AssetsJSLoader - v0.1.0 - 2013-11-14
+/*! AssetsJSLoader - v0.1.0 - 2013-11-17
 * http://ghaiklor.github.io/assetsjsloader/
 * Copyright (c) 2013 Eugene Obrezkov; Licensed MIT */
 var AJL = (function (window, document, AJL) {
