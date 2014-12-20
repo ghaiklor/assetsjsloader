@@ -1,6 +1,8 @@
 AssetsJSLoader (AJL)
 ====================
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ghaiklor/assetsjsloader?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **AJL** has been designed to simplify the management of loading javascript and css files. Its main feature is the ability to create your own packages of resources and load them only when necessary.
 
 As a result of the AJL work you get separated logic of resource including (JS or CSS files) from the view and the only thing that connects you to your view it's script-tag which include AJL script.
